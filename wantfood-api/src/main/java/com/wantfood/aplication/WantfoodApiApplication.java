@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class WantfoodApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WantfoodApiApplication.class, args);
+		SpringApplication.run(WantfoodApiApplication.class, args); 
 	}
 
 }
