@@ -6,25 +6,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.fasterxml.jackson.annotation.JsonRootName;
-
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonRootName(value = "cozinha")
+@Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@Entity
-public class Cozinha {
+public class Estado {
 	
-	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@Column(nullable = false)
+	@Column(name = "nome_estado", nullable = false)
 	private String nome;
-	
-//	@ManyToOne
-//	private Restaurante restaurante;
+
 }
