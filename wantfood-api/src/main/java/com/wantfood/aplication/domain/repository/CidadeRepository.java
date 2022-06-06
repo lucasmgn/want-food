@@ -1,14 +1,11 @@
 package com.wantfood.aplication.domain.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.wantfood.aplication.domain.model.Cidade;
 
-public interface CidadeRepository {
-	
-	List<Cidade> todas();
-	Cidade porId(Long id);
-	Cidade adicionar(Cidade cidade);
-	void remover(Long cidadeId);
+@Repository
+public interface CidadeRepository extends JpaRepository<Cidade, Long> {
 	
 }	

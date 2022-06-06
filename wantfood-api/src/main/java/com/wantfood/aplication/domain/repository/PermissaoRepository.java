@@ -1,14 +1,9 @@
 package com.wantfood.aplication.domain.repository;
 
-import java.util.List;
-																
+import org.springframework.data.jpa.repository.JpaRepository;
+
 import com.wantfood.aplication.domain.model.Permissao;
 
-public interface PermissaoRepository {
-	
-	List<Permissao> todas();
-	Permissao porId(Long id);
-	Permissao adicionar(Permissao permissao);
-	void remover(Permissao permissao);
-	
+public interface PermissaoRepository extends JpaRepository<Permissao, Long>{
+
 }	

@@ -1,6 +1,7 @@
 package com.wantfood.aplication.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +38,16 @@ public class CozinhaController {
 	// Colocando os valores em json
 	@GetMapping
 	public List<Cozinha> listar() {
-		return cozinhaRepository.todas();
+		return cozinhaRepository.findAll();
 	}
 
 	@GetMapping(value = "/{cozinhaId}")
 	public ResponseEntity<Cozinha> busca(@PathVariable Long cozinhaId) {
-		Cozinha cozinha = cozinhaRepository.porId(cozinhaId);
-		if (cozinha != null) {
-			return ResponseEntity.ok(cozinha);
+		Optional<Cozinha> cozinha = cozinhaRepository.findById(cozinhaId);
+		
+		if (cozinha.isPresent()) {
+			return ResponseEntity.ok(cozinha.get());
 		}
-
 		// return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		return ResponseEntity.notFound().build();
 
@@ -70,14 +71,14 @@ public class CozinhaController {
 	@PutMapping("/{cozinhaId}")
 //	@ResponseStatus(HttpStatus.Up)
 	public ResponseEntity<Cozinha> atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
-		Cozinha cozinhaAtual = cozinhaRepository.porId(cozinhaId);
+		Optional<Cozinha> cozinhaAtual = cozinhaRepository.findById(cozinhaId);
 
-		if (cozinhaAtual != null) {
+		if (cozinhaAtual.isPresent()) {
 			// Copiando os valores da cozinha para cozinha atual
-			BeanUtils.copyProperties(cozinha, cozinhaAtual, "id");
+			BeanUtils.copyProperties(cozinha, cozinhaAtual.get(), "id");
 
-			cadastroCozinha.adicionar(cozinhaAtual);
-			return ResponseEntity.ok(cozinhaAtual);
+			Cozinha cozinhaSalva = cadastroCozinha.adicionar(cozinhaAtual.get());
+			return ResponseEntity.ok(cozinhaSalva);
 		}
 
 		return ResponseEntity.notFound().build();
