@@ -5,7 +5,6 @@ import static com.wantfood.aplication.infrastructure.repository.spec.Restaurante
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.EntityManager;

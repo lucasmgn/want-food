@@ -68,8 +68,9 @@ public class RestauranteController {
 			@RequestBody Restaurante restaurante){
 		try {
 			Restaurante restauranteAtual = restauranteRepository.findById(restauranteId).orElse(null);
+			//Apagando e copiando as propriedades exceto o id, endereco e o formasPagamento (atributos da classe restaurante)
 			if(restauranteAtual != null) {
-				BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
+				BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento",  "endereco", "dataCadastro", "produtos");
 				
 				restauranteAtual = cadastroRestauranteService.salvar(restauranteAtual);
 				return ResponseEntity.ok(restauranteAtual);

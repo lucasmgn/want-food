@@ -19,7 +19,7 @@ public class Estado {
 	@EqualsAndHashCode.Include
 	private Long id;
 	
-	@Column(name = "nome_estado", nullable = false)
+	@Column(nullable = false)
 	private String nome;
 
 }
