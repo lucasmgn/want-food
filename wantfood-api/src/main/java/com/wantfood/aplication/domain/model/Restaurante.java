@@ -60,7 +60,7 @@ public class Restaurante {
 	@Column(nullable = false, columnDefinition = "datetime") //para tirar a precisão de milissegundos
 	private LocalDateTime dataAtualizacao;
 	
-//	@JsonIgnore
+	@JsonIgnore
 	@ManyToMany //Tudo que termina com ToMany tem a estrátegia de carregamento lazy
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),
