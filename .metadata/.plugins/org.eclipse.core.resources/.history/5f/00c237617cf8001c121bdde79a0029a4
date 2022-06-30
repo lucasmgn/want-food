@@ -1,0 +1,14 @@
+package com.wantfood.aplication.api.exceptionhandler;
+
+import java.time.LocalDateTime;
+
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder //Cria um padrão de projeto
+public class Problema {
+	
+	private LocalDateTime dataHora;
+	private String mensagem;
+}
