@@ -1,0 +1,6 @@
+package com.wantfood.aplication.api.exceptionhandler;
+
+public enum ProblemType {
+	ENTIDADE_NAO_ENCONTRADA,
+	ENTIDADE_EM_USO
+}
