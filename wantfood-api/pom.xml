@@ -54,10 +54,12 @@
 			<scope>runtime</scope>
 		</dependency>
 		
+<!-- 		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
+-->
 		
 		 <dependency>
       		<groupId>org.projectlombok</groupId>
@@ -71,6 +73,7 @@
 			<artifactId>flyway-core</artifactId>
 		</dependency>
 		
+		<!-- Corrigindo o erro de Unsupported Database: MySQL 8.0 -->
 		<dependency>
 			<groupId>org.flywaydb</groupId>
 			<artifactId>flyway-mysql</artifactId>
@@ -85,9 +88,15 @@
 	<build>
 		<plugins>
 			<plugin>
+   		 		<groupId>org.apache.maven.plugins</groupId>
+    			<artifactId>maven-resources-plugin</artifactId>
+    		</plugin>     
+		<!-- 
+			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+		 -->
 		</plugins>
 	</build>
 </project>
