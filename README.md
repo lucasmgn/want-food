@@ -12,6 +12,9 @@
   <li>JUnit</li>
   <li>MySQL</li>
   <li>Flyway</li>
+  <li>Bean Validation</li>
+  <li>Docker</li>
+  <li>Aws</li>
   <li>Jackson</li>
   <li>Postman</li>
 </ul>
