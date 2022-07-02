@@ -16,6 +16,8 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.PositiveOrZero;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -35,9 +37,16 @@ public class Restaurante {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	/*
+	 * @NotNull, quando for criado um novo restaurante ele não pode ser nulo
+	 * @NotEmpty, não aceita valores vázios e nem null
+	 * */
+	@NotBlank //vai validar que não pode ser vázio, null ou ter apenas espaços em branco
 	@Column(nullable = false)
 	private String nome;
 	
+//	@DecimalMin("0"), No mínimo a taxaFrete precisa ter um valor de 0	
+	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 

@@ -1,5 +1,6 @@
 package com.wantfood.aplication.api.exceptionhandler;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -9,6 +10,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
@@ -29,6 +32,32 @@ import com.wantfood.aplication.domain.exception.NegocioException;
  * */
 @ControllerAdvice 
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
+	
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+		
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+
+	    String detail = String.format("Existe um ou mais campos inválidos. Verifique e preencha novamente.");
+	    
+	    //Instancia que armazena as constraints de violações, tem acesso em quais fildes foram violadas
+	    BindingResult bindingResult = e.getBindingResult();
+	    
+	    //Transformando o bindingResult em uma lista de problemFields
+	    List<Problem.Field> problemFields = bindingResult.getFieldErrors()
+	    		.stream().map(fieldError -> Problem.Field.builder()
+	    				.name(fieldError.getField())//Pegando o nome da prorpiedade que foi violada
+	    				.userMessage(fieldError.getDefaultMessage())//Pegando a mensagem padrão
+	    				.build())
+	    		.collect(Collectors.toList());
+	    
+	    Problem problem = createProblemBuilder(status, problemType, detail)
+	    		.userMessage(detail)
+	    		.fields(problemFields)
+	    		.build();
+
+	    return handleExceptionInternal(e, problem, headers, status, request);
+	}
 	
 
 	private static final String USER_MESSAGE = "Ocorreu um erro interno inesperado no sistema. "
@@ -113,10 +142,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		 * chamará o metodo que irá tratar de forma especifica
 		 * */
 		if(rootCause instanceof InvalidFormatException) {
-			return handleInvalidFormatException((InvalidFormatException) rootCause, headers,
-					status, request);
+			return handleInvalidFormat((InvalidFormatException) rootCause, headers, status, request);
+			
 		}else if(rootCause instanceof PropertyBindingException) {
-			return handlePropertyBindingException((PropertyBindingException) rootCause, headers, status, request);
+			return handlePropertyBinding((PropertyBindingException) rootCause, headers, status, request);
 		}
 		
 		ProblemType problemType = ProblemType.ERRO_NA_MENSAGEM;
@@ -130,7 +159,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	/*
 	 * Método a ser chamado se a causa raiz for um IgnoredPropertyException ou UnrecongnizePropertyException
 	 * */
-	private ResponseEntity<Object> handlePropertyBindingException(
+	private ResponseEntity<Object> handlePropertyBinding(
 			PropertyBindingException e,HttpHeaders headers, HttpStatus status, WebRequest request) {
 		/*
 		 * IgnoredPropertyException e UnrecongnizePropertyException que extends PropertyBindingException
@@ -153,7 +182,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	/*
 	 * Método a ser chamado se a causa raiz for um InvalidFormatException
 	 * */
-	private ResponseEntity<Object> handleInvalidFormatException(InvalidFormatException e,
+	private ResponseEntity<Object> handleInvalidFormat(InvalidFormatException e,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
 		/*
@@ -181,7 +210,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	 * {EstadoeXEMPLOException.class}
 	 * */
 	@ExceptionHandler(EntidadeNaoEncontradaException.class)
-	public ResponseEntity<?> handleEntidadeNaoEncontradaException(EntidadeNaoEncontradaException e,
+	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException e,
 			WebRequest request){
 		
 		HttpStatus status = HttpStatus.NOT_FOUND;
@@ -194,7 +223,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(NegocioException.class)
-	public ResponseEntity<?> handleNegocioException(NegocioException e, WebRequest request){
+	public ResponseEntity<?> handleNegocio(NegocioException e, WebRequest request){
 		
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		ProblemType problemType = ProblemType.ERRO_NEGOCIO;
@@ -206,7 +235,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	}
 	
 	@ExceptionHandler(EntidadeEmUsoException.class)
-	public ResponseEntity<?> handleEntidadeEmUsoException(EntidadeEmUsoException e, WebRequest request){
+	public ResponseEntity<?> handleEntidadeEmUso(EntidadeEmUsoException e, WebRequest request){
 
 		HttpStatus status = HttpStatus.CONFLICT;
 		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
@@ -228,13 +257,17 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		 */ 
 		if(body == null) {
 			body = Problem.builder()
+					.timestamp(LocalDateTime.now())
 					.title(status.getReasonPhrase()) //descreve o status que retorna na repsosta
 					.status(status.value())
+					.userMessage(USER_MESSAGE) //Mensagem para o usuário
 					.build();
 		}else if(body instanceof String) {
 			body = Problem.builder()
+					.timestamp(LocalDateTime.now())
 					.title((String) body) //descreve o status que retorna na repsosta
 					.status(status.value())
+					.userMessage(USER_MESSAGE)
 					.build();
 		}
 		
@@ -246,15 +279,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 			ProblemType problemType, String detail){
 		
 		return Problem.builder()
+				.timestamp(LocalDateTime.now())
 				.status(status.value())
 				.type(problemType.getUri())
 				.title(problemType.getTitle())
 				.detail(detail);
 	}
 
-	/*
-	 * Método joinPath irá concatenar os nomes das propriedades, separando-as por "."
-	 * */
+	
+	//Método joinPath irá concatenar os nomes das propriedades, separando-as por "." 
 	private String joinPath(List<Reference> references) {
 	    return references.stream()
 	        .map(ref -> ref.getFieldName())

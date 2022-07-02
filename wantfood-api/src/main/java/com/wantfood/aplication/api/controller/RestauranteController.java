@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.BeanUtils;
@@ -51,9 +52,13 @@ public class RestauranteController {
 		return cadastroRestauranteService.buscarOuFalhar(restauranteId);		
 	}
 	
+	/*
+	 * @Valid Antes de chamar o método adicionar ele valida se o a nova entidade 
+	 * de restaurante atende as especificações das colunas 
+	 * */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante adicionar(@RequestBody Restaurante restaurante){
+	public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante){
 	    try {
 	        return cadastroRestauranteService.salvar(restaurante);
 	    } catch (CozinhaNaoEncontradaException e) {
