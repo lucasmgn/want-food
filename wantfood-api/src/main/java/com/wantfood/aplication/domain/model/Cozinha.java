@@ -9,24 +9,28 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonRootName;
+import com.wantfood.aplication.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@JsonRootName(value = "cozinha")
+//@JsonRootName(value = "cozinha")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
 public class Cozinha {
 	
+	@NotNull(groups = Groups.CozinhaId.class)
 	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotBlank //(http) Quando for atualizar ou criar uma nova cozinha será obrigatório preencher
 	@Column(nullable = false)
 	private String nome;
 	

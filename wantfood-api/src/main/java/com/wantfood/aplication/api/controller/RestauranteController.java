@@ -53,12 +53,15 @@ public class RestauranteController {
 	}
 	
 	/*
-	 * @Valid Antes de chamar o método adicionar ele valida se o a nova entidade 
+	 * @Valid, antes de chamar o método adicionar ele valida se o a nova entidade 
 	 * de restaurante atende as especificações das colunas 
+	 * @Validated, tem a mesma função que o @Valid porém ele recebe argumentos 
+	 * fazendo a validação usando o grupo cadastroRestaurantes @Validated(Groups.CadastroRestaurante.class)
 	 * */
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Restaurante adicionar(@RequestBody @Valid Restaurante restaurante){
+	public Restaurante adicionar(
+			@RequestBody @Valid Restaurante restaurante){
 	    try {
 	        return cadastroRestauranteService.salvar(restaurante);
 	    } catch (CozinhaNaoEncontradaException e) {
@@ -68,7 +71,7 @@ public class RestauranteController {
 	
 	@PutMapping("/{restauranteId}")
 	public Restaurante atualizar(@PathVariable Long restauranteId,
-			@RequestBody Restaurante restaurante){
+			@RequestBody @Valid Restaurante restaurante){
 		
 		try {
 			Restaurante restauranteAtual = cadastroRestauranteService.buscarOuFalhar(restauranteId);

@@ -2,6 +2,8 @@ package com.wantfood.aplication.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,8 +32,10 @@ public class CozinhaController {
 	@Autowired
 	private CadastroCozinhaService cadastroCozinha;
 
-	// Mapeando o metodo listar para quando fizerem uma requisição get
-	// Colocando os valores em json
+	/*
+	 * Mapeando o metodo listar para quando fizerem uma requisição get
+	 * Colocando os valores em json
+	 * */
 	@GetMapping
 	public List<Cozinha> listar() {
 		return cozinhaRepository.findAll();
@@ -46,13 +50,13 @@ public class CozinhaController {
 	// Colocando o status como create (status 201), e irá retornar a cozinha criada 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public Cozinha adicionar(@RequestBody Cozinha cozinha) {
+	public Cozinha adicionar(@RequestBody @Valid Cozinha cozinha) {
 		return cadastroCozinha.adicionar(cozinha);
 	}
 
 	@PutMapping("/{cozinhaId}")
 //	@ResponseStatus(HttpStatus.Up)
-	public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody Cozinha cozinha) {
+	public Cozinha atualizar(@PathVariable Long cozinhaId, @RequestBody @Valid Cozinha cozinha) {
 		
 		Cozinha cozinhaAtual = cadastroCozinha.buscaOuFalha(cozinhaId);
 		
