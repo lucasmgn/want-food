@@ -6,6 +6,9 @@ import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.TypeMismatchException;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -33,22 +36,36 @@ import com.wantfood.aplication.domain.exception.NegocioException;
 @ControllerAdvice 
 public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	
+	private static final String USER_MESSAGE = "Ocorreu um erro interno inesperado no sistema. "
+	        + "Tente novamente e se o problema persistir, entre em contato "
+	        + "com o administrador do sistema.";
+	
+	//Criado para acessar a getMessage colocando o fieldError e o locale
+	@Autowired
+	private MessageSource messageSource;
+	
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
 		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
-
+		
 	    String detail = String.format("Existe um ou mais campos inválidos. Verifique e preencha novamente.");
 	    
 	    //Instancia que armazena as constraints de violações, tem acesso em quais fildes foram violadas
 	    BindingResult bindingResult = e.getBindingResult();
 	    
 	    //Transformando o bindingResult em uma lista de problemFields
-	    List<Problem.Field> problemFields = bindingResult.getFieldErrors()
-	    		.stream().map(fieldError -> Problem.Field.builder()
+	    List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream()
+	    		.map(fieldError -> {
+	    			
+//	    			recebe o valor para passar na .userMessage, objetivo é ler o arquivo message.properties
+	    			String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
+	    			
+	    			return Problem.Field.builder()
 	    				.name(fieldError.getField())//Pegando o nome da prorpiedade que foi violada
-	    				.userMessage(fieldError.getDefaultMessage())//Pegando a mensagem padrão
-	    				.build())
+	    				.userMessage(message)// .getDefaultMessage(), pegando a mensagem padrão
+	    				.build();
+	    			})
 	    		.collect(Collectors.toList());
 	    
 	    Problem problem = createProblemBuilder(status, problemType, detail)
@@ -58,11 +75,6 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 
 	    return handleExceptionInternal(e, problem, headers, status, request);
 	}
-	
-
-	private static final String USER_MESSAGE = "Ocorreu um erro interno inesperado no sistema. "
-	        + "Tente novamente e se o problema persistir, entre em contato "
-	        + "com o administrador do sistema.";
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<?> handleUncaught(Exception e, WebRequest request){

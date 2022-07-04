@@ -48,6 +48,7 @@ public class Restaurante {
 	 * @NotBlank, vai validar que não pode ser vázio, null ou ter apenas espaços em branco
 	 * @NotBlank(groups = Groups.CadastroRestaurantes.class),
 	 *  podendo colocar mais de um grupo {Groups.CadastroRestaurantes.class}
+	 *  Menssagem do notBlank está em message.properties
 	 * */
 	@NotBlank
 	@Column(nullable = false)
@@ -57,6 +58,7 @@ public class Restaurante {
 	 * @DecimalMin("0"), No mínimo a taxaFrete precisa ter um valor de 0
 	 * @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
 	 * */	
+	@NotNull 
 	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
