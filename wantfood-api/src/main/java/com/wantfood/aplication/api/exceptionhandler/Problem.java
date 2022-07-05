@@ -23,7 +23,7 @@ public class Problem {
 	private String detail;
 	private String userMessage;
 	private LocalDateTime timestamp;
-	private List<Field> fields;
+	private List<Object> objects;
 	
 	/*
 	 *Sendo criado uma classe para listar as causa dos problemas inicialmente
@@ -31,7 +31,7 @@ public class Problem {
 	 * */
 	@Getter
 	@Builder
-	public static class Field{
+	public static class Object{
 		private String name;
 		private String userMessage;
 	}

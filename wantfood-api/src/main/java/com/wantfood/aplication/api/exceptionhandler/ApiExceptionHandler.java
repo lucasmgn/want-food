@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -25,6 +26,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
+import com.wantfood.aplication.core.validation.ValidacaoException;
 import com.wantfood.aplication.domain.exception.EntidadeEmUsoException;
 import com.wantfood.aplication.domain.exception.EntidadeNaoEncontradaException;
 import com.wantfood.aplication.domain.exception.NegocioException;
@@ -44,36 +46,60 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	@Autowired
 	private MessageSource messageSource;
 	
+	@ExceptionHandler({ ValidacaoException.class })
+	public ResponseEntity<Object> handleValidacaoException(ValidacaoException ex, WebRequest request) {
+	    return handleValidationInternal(ex, ex.getBindingResult(), new HttpHeaders(), 
+	            HttpStatus.BAD_REQUEST, request);
+	}
+	
+	 //BindingResult bindingResult Instancia que armazena as constraints de violações, tem acesso em quais fildes foram violadas
+	private ResponseEntity<Object> handleValidationInternal(Exception e, BindingResult bindingResult,
+			HttpHeaders headers, HttpStatus status, WebRequest request){
+			
+		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
+		String detail = "Um ou mais campos inválidos. Faça o preenchimento correto e tente novamente.";
+		
+	    /*
+	     * Transformando o bindingResult em uma lista de problemFields,
+	     * mudando de getFieldErrors para AllErrors, com o bjetivo de pegar não apenas
+	     *  os erros dos atributos, mas tabmém os erros da classes 
+	     * */
+		 List<Problem.Object> problemObjects = bindingResult.getAllErrors().stream()
+		    		.map(objectError -> {
+
+		    			/*
+		    			 * recebe o valor para passar na .userMessage,
+		    			 *  objetivo é ler o arquivo message.properties, o parametro mudou de fieldError para
+		    			 *  objectError pq agora estou tratando de erros do objeto também
+		    			 * */
+		    			String message = messageSource.getMessage(objectError, LocaleContextHolder.getLocale());
+		    			
+		    			String name = objectError.getObjectName().toUpperCase();
+		    			
+		    			//Verificando se o objectError é um fieldError
+		    			if(objectError instanceof FieldError) {
+		    				name = ((FieldError) objectError).getField();
+		    			}
+		    			
+		    			return Problem.Object.builder()
+		    				.name(name)//Pegando o nome da prorpiedade que foi violada
+		    				.userMessage(message)// .getDefaultMessage(), pegando a mensagem padrão
+		    				.build();
+		    			})
+		    		.collect(Collectors.toList());
+		 
+		 Problem problem = createProblemBuilder(status, problemType, detail)
+				 .userMessage(detail)
+				 .objects(problemObjects)
+				 .build();
+		    
+				return handleExceptionInternal(e, problem, headers, status, request);
+	}
+	
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException e,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		
-		ProblemType problemType = ProblemType.DADOS_INVALIDOS;
-		
-	    String detail = String.format("Existe um ou mais campos inválidos. Verifique e preencha novamente.");
-	    
-	    //Instancia que armazena as constraints de violações, tem acesso em quais fildes foram violadas
-	    BindingResult bindingResult = e.getBindingResult();
-	    
-	    //Transformando o bindingResult em uma lista de problemFields
-	    List<Problem.Field> problemFields = bindingResult.getFieldErrors().stream()
-	    		.map(fieldError -> {
-	    			
-//	    			recebe o valor para passar na .userMessage, objetivo é ler o arquivo message.properties
-	    			String message = messageSource.getMessage(fieldError, LocaleContextHolder.getLocale());
-	    			
-	    			return Problem.Field.builder()
-	    				.name(fieldError.getField())//Pegando o nome da prorpiedade que foi violada
-	    				.userMessage(message)// .getDefaultMessage(), pegando a mensagem padrão
-	    				.build();
-	    			})
-	    		.collect(Collectors.toList());
-	    
-	    Problem problem = createProblemBuilder(status, problemType, detail)
-	    		.userMessage(detail)
-	    		.fields(problemFields)
-	    		.build();
 
-	    return handleExceptionInternal(e, problem, headers, status, request);
+	    return handleValidationInternal(e, e.getBindingResult(), headers, status, request);
 	}
 
 	@ExceptionHandler(Exception.class)
@@ -258,7 +284,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 				.build();
 		
 		return handleExceptionInternal(e, problem, new HttpHeaders(),status, request);
-	}
+	}  
 	
 	@Override
 	protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body,

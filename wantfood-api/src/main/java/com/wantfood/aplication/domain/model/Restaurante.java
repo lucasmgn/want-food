@@ -19,6 +19,7 @@ import javax.persistence.OneToMany;
 import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
@@ -27,11 +28,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wantfood.aplication.core.validation.Groups;
-import com.wantfood.aplication.core.validation.TaxaFrete;
+import com.wantfood.aplication.core.validation.ValorZeroFreteGratuito;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+//Criando constraints de validação customizadas em nível de classe
+@ValorZeroFreteGratuito(valorField = "taxaFrete", descricaoField = "nome",
+descricaoObrigatoria = "Frete Grátis")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @Entity
@@ -57,10 +61,11 @@ public class Restaurante {
 	/*
 	 * @DecimalMin("0"), No mínimo a taxaFrete precisa ter um valor de 0
 	 * @PositiveOrZero(groups = Groups.CadastroRestaurante.class)
+	 * @TaxaFrete //constraint de composição
+	 * @Multiplo(numero = 5) //Constraint customizade com implementacao do ConstraintValidator
 	 * */	
 	@NotNull 
-//	@PositiveOrZero
-	@TaxaFrete
+	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
