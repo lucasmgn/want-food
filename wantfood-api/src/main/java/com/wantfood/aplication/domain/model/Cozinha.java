@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.wantfood.aplication.Groups;
+import com.wantfood.aplication.core.validation.Groups;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
