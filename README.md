@@ -12,6 +12,7 @@
   <li>JUnit</li>
   <li>MySQL</li>
   <li>Flyway</li>
+  <li>REST Assured</li>
   <li>Bean Validation</li>
   <li>Docker</li>
   <li>Aws</li>
