@@ -26,7 +26,6 @@ import javax.validation.groups.Default;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.wantfood.aplication.core.validation.Groups;
 import com.wantfood.aplication.core.validation.ValorZeroFreteGratuito;
 
@@ -78,6 +77,8 @@ public class Restaurante {
 	 * @ConvertGroup(from = Default.class, to = Groups.CozinhaId.class),
 	 * na hora que for validar cozinha irá transforar de default para CadastroRestaurante,
 	 * diminuindo a complexidade do código 
+	 * @JsonIgnoreProperties("nome") ignorando a propriedade nome de cozinha na classe restaurante
+	 * allowGetters = true aceitando metodos de getter na aplicação
 	 * */
 	@Valid
 	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
@@ -86,28 +87,23 @@ public class Restaurante {
 	@JoinColumn(name = "cozinha_id", nullable= false)
 	private Cozinha cozinha;
 
-	@JsonIgnore 
 	@Embedded //Tipo incorporado
 	private Endereco endereco;
 	
-	@JsonIgnore 
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
 	private LocalDateTime dataCadastro;
-	
-	@JsonIgnore 
+	 
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime") //para tirar a precisão de milissegundos
 	private LocalDateTime dataAtualizacao;
 	
-	@JsonIgnore
 	@ManyToMany //Tudo que termina com ToMany tem a estrátegia de carregamento lazy
 	@JoinTable(name = "restaurante_forma_pagamento",
 			joinColumns = @JoinColumn(name = "restaurante_id"),
 			inverseJoinColumns = @JoinColumn(name = "forma_pagamento_id"))
 	private List<FormaPagamento> formasPagamento = new ArrayList<>();
 	
-	@JsonIgnore
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
 

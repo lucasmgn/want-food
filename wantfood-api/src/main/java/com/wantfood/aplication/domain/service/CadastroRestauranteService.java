@@ -1,5 +1,7 @@
 package com.wantfood.aplication.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,8 +19,8 @@ public class CadastroRestauranteService {
 	@Autowired
 	private CadastroCozinhaService cadastroCozinhaService;
 	
-	
-	public Restaurante salvar(Restaurante restaurante) {
+	@Transactional //todos os metodos public que altereram o bd são anotados com o @Transactional
+	public Restaurante adicionar(Restaurante restaurante) {
 		Long cozinhaId = restaurante.getCozinha().getId();
 		
 		Cozinha cozinha = cadastroCozinhaService.buscaOuFalha(cozinhaId);

@@ -69,7 +69,7 @@ public class RestauranteController {
 	public Restaurante adicionar(
 			@RequestBody @Valid Restaurante restaurante){
 	    try {
-	        return cadastroRestauranteService.salvar(restaurante);
+	        return cadastroRestauranteService.adicionar(restaurante);
 	    } catch (CozinhaNaoEncontradaException e) {
 	        throw new NegocioException(e.getMessage());
 	    }
@@ -84,7 +84,7 @@ public class RestauranteController {
 			
 			BeanUtils.copyProperties(restaurante, restauranteAtual, "id", "formasPagamento",  "endereco", "dataCadastro", "produtos");
 		
-			return cadastroRestauranteService.salvar(restauranteAtual);	
+			return cadastroRestauranteService.adicionar(restauranteAtual);	
 			
 		}catch(CozinhaNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());

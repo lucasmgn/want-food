@@ -48,7 +48,7 @@ public class CidadeController {
 	public Cidade adicionar(@RequestBody @Valid Cidade cidade) {
 		
 		try {
-			return cadastroCidade.salvar(cidade);
+			return cadastroCidade.adicionar(cidade);
 		}catch(EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}
@@ -62,7 +62,7 @@ public class CidadeController {
 			Cidade cidadeAtual = cadastroCidade.buscarOuFalhar(cidadeId);
 			
 			BeanUtils.copyProperties(cidade, cidadeAtual, "id");
-			return cadastroCidade.salvar(cidadeAtual);
+			return cadastroCidade.adicionar(cidadeAtual);
 		}catch(EstadoNaoEncontradoException e) {
 			throw new NegocioException(e.getMessage(), e);
 		}	

@@ -1,5 +1,7 @@
 package com.wantfood.aplication.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,7 +21,8 @@ public class CadastroEstadoService {
 	@Autowired
 	private EstadoRepository estadoRepository;
 	
-	public Estado salvar(Estado estado) {
+	@Transactional
+	public Estado adicionar(Estado estado) {
 		return estadoRepository.save(estado);
 	}
 	
@@ -28,6 +31,7 @@ public class CadastroEstadoService {
 				.orElseThrow(() -> new EstadoNaoEncontradoException(estadoId));
 	}
 	
+	@Transactional
 	public void excluir(Long estadoId) {
 		try {
 			estadoRepository.deleteById(estadoId);
