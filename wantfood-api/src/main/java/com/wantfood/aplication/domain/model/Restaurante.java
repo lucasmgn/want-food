@@ -1,7 +1,7 @@
 package com.wantfood.aplication.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,17 +16,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.validation.Valid;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.groups.ConvertGroup;
-import javax.validation.groups.Default;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.wantfood.aplication.core.validation.Groups;
 import com.wantfood.aplication.core.validation.ValorZeroFreteGratuito;
 
 import lombok.Data;
@@ -53,7 +46,7 @@ public class Restaurante {
 	 *  podendo colocar mais de um grupo {Groups.CadastroRestaurantes.class}
 	 *  Menssagem do notBlank está em message.properties
 	 * */
-	@NotBlank
+//	@NotBlank
 	@Column(nullable = false)
 	private String nome;
 	
@@ -63,8 +56,8 @@ public class Restaurante {
 	 * @TaxaFrete //constraint de composição
 	 * @Multiplo(numero = 5) //Constraint customizade com implementacao do ConstraintValidator
 	 * */	
-	@NotNull 
-	@PositiveOrZero
+//	@NotNull 
+//	@PositiveOrZero
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
@@ -80,9 +73,9 @@ public class Restaurante {
 	 * @JsonIgnoreProperties("nome") ignorando a propriedade nome de cozinha na classe restaurante
 	 * allowGetters = true aceitando metodos de getter na aplicação
 	 * */
-	@Valid
-	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-	@NotNull
+//	@Valid
+//	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
+//	@NotNull
 	@ManyToOne
 	@JoinColumn(name = "cozinha_id", nullable= false)
 	private Cozinha cozinha;
@@ -92,11 +85,11 @@ public class Restaurante {
 	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 	 
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime") //para tirar a precisão de milissegundos
-	private LocalDateTime dataAtualizacao;
+	private OffsetDateTime dataAtualizacao;
 	
 	@ManyToMany //Tudo que termina com ToMany tem a estrátegia de carregamento lazy
 	@JoinTable(name = "restaurante_forma_pagamento",

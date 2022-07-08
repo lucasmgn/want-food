@@ -1,6 +1,6 @@
 package com.wantfood.aplication.api.model.mixin;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,10 +25,10 @@ public class RestauranteMixin {
 	private Endereco endereco;
 	
 	@JsonIgnore 
-	private LocalDateTime dataCadastro;
+	private OffsetDateTime dataCadastro;
 	
 	@JsonIgnore 
-	private LocalDateTime dataAtualizacao;
+	private OffsetDateTime dataAtualizacao;
 	
 	@JsonIgnore
 	private List<FormaPagamento> formasPagamento = new ArrayList<>();

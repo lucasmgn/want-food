@@ -1,6 +1,6 @@
 package com.wantfood.aplication.api.exceptionhandler;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -295,14 +295,14 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		 */ 
 		if(body == null) {
 			body = Problem.builder()
-					.timestamp(LocalDateTime.now())
+					.timestamp(OffsetDateTime.now())
 					.title(status.getReasonPhrase()) //descreve o status que retorna na repsosta
 					.status(status.value())
 					.userMessage(USER_MESSAGE) //Mensagem para o usuário
 					.build();
 		}else if(body instanceof String) {
 			body = Problem.builder()
-					.timestamp(LocalDateTime.now())
+					.timestamp(OffsetDateTime.now())
 					.title((String) body) //descreve o status que retorna na repsosta
 					.status(status.value())
 					.userMessage(USER_MESSAGE)
@@ -317,7 +317,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 			ProblemType problemType, String detail){
 		
 		return Problem.builder()
-				.timestamp(LocalDateTime.now())
+				.timestamp(OffsetDateTime.now())
 				.status(status.value())
 				.type(problemType.getUri())
 				.title(problemType.getTitle())
