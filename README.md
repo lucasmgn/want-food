@@ -11,10 +11,11 @@
   <li>JUnit</li>
   <li>MySQL</li>
   <li>Flyway</li>
+  <li>Model Mapper</li>
+  <li>Jackson</li>
   <li>REST Assured</li>
   <li>Bean Validation</li>
   <li>Docker</li>
   <li>Aws</li>
-  <li>Jackson</li>
   <li>Postman</li>
 </ul>
