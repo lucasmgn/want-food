@@ -1,14 +1,15 @@
 package com.wantfood.aplication.api.model.input;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class CozinhaInputDTO {
+public class EstadoIdInputDTO {
 	
-	@NotBlank
-	private String nome;
+	@NotNull
+	private Long id;
+
 }

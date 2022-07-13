@@ -26,7 +26,7 @@ public class CadastroEstadoService {
 		return estadoRepository.save(estado);
 	}
 	
-	public Estado buscarOuFalhar(Long estadoId) {
+	public Estado buscaOuFalha(Long estadoId) {
 		return estadoRepository.findById(estadoId)
 				.orElseThrow(() -> new EstadoNaoEncontradoException(estadoId));
 	}

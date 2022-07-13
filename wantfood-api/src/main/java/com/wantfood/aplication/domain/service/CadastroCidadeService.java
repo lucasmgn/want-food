@@ -29,7 +29,7 @@ public class CadastroCidadeService {
 	public Cidade adicionar(Cidade cidade) {
 		Long estadoId = cidade.getEstado().getId();
 
-		Estado estado = cadastroEstadoService.buscarOuFalhar(estadoId);
+		Estado estado = cadastroEstadoService.buscaOuFalha(estadoId);
 		cidade.setEstado(estado);
 		
 		 return cidadeRepository.save(cidade);
