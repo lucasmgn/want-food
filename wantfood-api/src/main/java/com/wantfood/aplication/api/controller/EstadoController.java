@@ -59,7 +59,7 @@ public class EstadoController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public EstadoDTO adicionar(@RequestBody @Valid EstadoInputDTO estadoInputDTO) {
-Estado estado = estadoInputDisassembler.toDomainObject(estadoInputDTO);
+		Estado estado = estadoInputDisassembler.toDomainObject(estadoInputDTO);
 		
 		estado = cadastroEstadoService.adicionar(estado);
 		

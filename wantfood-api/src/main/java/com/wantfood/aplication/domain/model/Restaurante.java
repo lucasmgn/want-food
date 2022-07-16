@@ -46,7 +46,7 @@ public class Restaurante {
 	 *  podendo colocar mais de um grupo {Groups.CadastroRestaurantes.class}
 	 *  Menssagem do notBlank está em message.properties
 	 * */
-//	@NotBlank
+
 	@Column(nullable = false)
 	private String nome;
 	
@@ -56,8 +56,7 @@ public class Restaurante {
 	 * @TaxaFrete //constraint de composição
 	 * @Multiplo(numero = 5) //Constraint customizade com implementacao do ConstraintValidator
 	 * */	
-//	@NotNull 
-//	@PositiveOrZero
+
 	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 
@@ -73,15 +72,15 @@ public class Restaurante {
 	 * @JsonIgnoreProperties("nome") ignorando a propriedade nome de cozinha na classe restaurante
 	 * allowGetters = true aceitando metodos de getter na aplicação
 	 * */
-//	@Valid
-//	@ConvertGroup(from = Default.class, to = Groups.CozinhaId.class)
-//	@NotNull
+
 	@ManyToOne
 	@JoinColumn(name = "cozinha_id", nullable= false)
 	private Cozinha cozinha;
 
 	@Embedded //Tipo incorporado
 	private Endereco endereco;
+	
+	private boolean ativo = Boolean.TRUE;
 	
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
@@ -99,6 +98,14 @@ public class Restaurante {
 	
 	@OneToMany(mappedBy = "restaurante")
 	private List<Produto> produtos = new ArrayList<>();
+	
+	public void ativar() {
+		setAtivo(true);
+	}
+	
+	public void desativar() {
+		setAtivo(false);
+	}
 
 
 }

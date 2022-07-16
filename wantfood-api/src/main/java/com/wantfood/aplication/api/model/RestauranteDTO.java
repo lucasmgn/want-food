@@ -13,10 +13,12 @@ import lombok.Setter;
 @Getter
 @Setter
 public class RestauranteDTO {
-	
+	//Precisa ter os nomes dos atributos das entidades
 	private Long id;
 	private String nome;
 	private BigDecimal taxaFrete;
 	private CozinhaDTO cozinha;
+	private Boolean ativo;
+	private EnderecoDTO endereco;
 
 }
