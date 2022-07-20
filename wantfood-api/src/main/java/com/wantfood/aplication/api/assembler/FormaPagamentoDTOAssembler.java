@@ -1,5 +1,6 @@
 package com.wantfood.aplication.api.assembler;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,7 +21,7 @@ public class FormaPagamentoDTOAssembler {
 		return modelMapper.map(formaPagamento, FormaPagamentoDTO.class);
 	}
 	
-	public List<FormaPagamentoDTO> toCollectionModel(List<FormaPagamento> formasPagamentos) {
+	public List<FormaPagamentoDTO> toCollectionModel(Collection<FormaPagamento> formasPagamentos) {
 		return formasPagamentos.stream()
 				.map(formasPagamento -> toModel(formasPagamento))
 				.collect(Collectors.toList());

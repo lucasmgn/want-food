@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.wantfood.aplication.domain.exception.RestauranteNaoEncontradoException;
 import com.wantfood.aplication.domain.model.Cidade;
 import com.wantfood.aplication.domain.model.Cozinha;
+import com.wantfood.aplication.domain.model.FormaPagamento;
 import com.wantfood.aplication.domain.model.Restaurante;
 import com.wantfood.aplication.domain.repository.RestauranteRepository;
 
@@ -22,6 +23,9 @@ public class CadastroRestauranteService {
 	
 	@Autowired
 	private CadastroCidadeService cadastroCidadeService;
+	
+	@Autowired
+	private CadastroFormaPagamentoService cadastroFormaPagamentoService;
 	
 	@Transactional //todos os metodos public que altereram o bd são anotados com o @Transactional
 	public Restaurante adicionar(Restaurante restaurante) {
@@ -50,9 +54,42 @@ public class CadastroRestauranteService {
 		restauranteAtual.desativar();
 	}
 	
+	//desvinculando forma de pagamento do restaurante
+	@Transactional
+	public void desassociarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscaOuFalha(formaPagamentoId);
+		
+		restaurante.removerFormaPagamento(formaPagamento);
+		//não precisa do metodo save pq a Anotação transactional gerencia e salva essa boa alteração
+	}
+	
+	@Transactional
+	public void associarFormaPagamento(Long restauranteId, Long formaPagamentoId) {
+		Restaurante restaurante = buscarOuFalhar(restauranteId);
+		FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscaOuFalha(formaPagamentoId);
+		
+		restaurante.adicionarFormaPagamento(formaPagamento);
+		//não precisa do metodo save pq a Anotação transactional gerencia e salva essa boa alteração
+	}
+	
 	public Restaurante buscarOuFalhar(Long restauranteId) {
 		return restauranteRepository.findById(restauranteId)
 				.orElseThrow(() -> new RestauranteNaoEncontradoException(restauranteId));
 	}
+	
+	@Transactional
+	public void abrir(Long restauranteId) {
+	    Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+	    
+	    restauranteAtual.abrir();
+	}
+
+	@Transactional
+	public void fechar(Long restauranteId) {
+	    Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
+	    
+	    restauranteAtual.fechar();
+	}     
 	
 }

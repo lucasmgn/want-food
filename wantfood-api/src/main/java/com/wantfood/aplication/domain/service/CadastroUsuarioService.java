@@ -1,5 +1,7 @@
 package com.wantfood.aplication.domain.service;
 
+import java.util.Optional;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +20,20 @@ public class CadastroUsuarioService {
 	
 	@Transactional
 	public Usuario salvar(Usuario usuario) {
+		/*
+		 * verificando se ja existe um usuario com um email cadastrado,
+		 * fazendo uma verificação para apenas cadastrar usuários com e-mails diferentes
+		 * condição que não permita cadastrar novo usuário com um e-mail ja cadastrado, e 
+		 * que possa atualizar um usuário sem ocorrer problema
+		 * descarregando o jpa para n ter bug de gerenciamento 
+		 * */
+		usuarioRepository.detach(usuario);
+		Optional<Usuario> usuarioExistente = usuarioRepository.findByEmail(usuario.getEmail());
+		
+		if(usuarioExistente.isPresent() && !usuarioExistente.get().equals(usuario)) {
+			throw new NegocioException(String.format("Já existe um usuário cadastrado com essse e-mail %s",
+					usuario.getEmail()));
+		}
 		return usuarioRepository.save(usuario);
 	}
 	
