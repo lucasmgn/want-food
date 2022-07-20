@@ -21,8 +21,11 @@ public class RestauranteInputDTO {
 	@PositiveOrZero
 	private BigDecimal taxaFrete;
 	
-	
 	@Valid
 	@NotNull
 	private CozinhaIdInputDTO cozinha;
+	
+	@Valid
+	@NotNull
+	private EnderecoInputDTO endereco;
 }

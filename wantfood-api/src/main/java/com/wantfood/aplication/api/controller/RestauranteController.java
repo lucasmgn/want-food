@@ -20,6 +20,7 @@ import com.wantfood.aplication.api.assembler.RestauranteDTOAssembler;
 import com.wantfood.aplication.api.assembler.RestauranteInputDisassembler;
 import com.wantfood.aplication.api.model.RestauranteDTO;
 import com.wantfood.aplication.api.model.input.RestauranteInputDTO;
+import com.wantfood.aplication.domain.exception.CidadeNaoEncontradaException;
 import com.wantfood.aplication.domain.exception.CozinhaNaoEncontradaException;
 import com.wantfood.aplication.domain.exception.NegocioException;
 import com.wantfood.aplication.domain.model.Restaurante;
@@ -69,7 +70,7 @@ public class RestauranteController {
 	    	
 	    	return restauranteDTOAssembler.toModel(cadastroRestauranteService.adicionar(restaurante));
 	    	
-	    } catch (CozinhaNaoEncontradaException e) {
+	    } catch (CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 	        throw new NegocioException(e.getMessage());
 	    }
 	}
@@ -85,7 +86,7 @@ public class RestauranteController {
 			
 			return restauranteDTOAssembler.toModel(cadastroRestauranteService.adicionar(restauranteAtual));
 	
-		}catch(CozinhaNaoEncontradaException e) {
+		}catch(CozinhaNaoEncontradaException | CidadeNaoEncontradaException e) {
 			throw new NegocioException(e.getMessage());
 		}	
 	}
