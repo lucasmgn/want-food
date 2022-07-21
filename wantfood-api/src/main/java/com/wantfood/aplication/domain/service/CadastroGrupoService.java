@@ -11,6 +11,7 @@ import com.wantfood.aplication.domain.exception.EntidadeEmUsoException;
 import com.wantfood.aplication.domain.exception.EstadoNaoEncontradoException;
 import com.wantfood.aplication.domain.exception.GrupoNaoEncontradoException;
 import com.wantfood.aplication.domain.model.Grupo;
+import com.wantfood.aplication.domain.model.Permissao;
 import com.wantfood.aplication.domain.repository.GrupoRepository;
 
 @Service
@@ -21,6 +22,9 @@ public class CadastroGrupoService {
 	
 	@Autowired
 	private GrupoRepository grupoRepository;
+	
+	@Autowired
+	private CadastroPermissaoService cadastroPermissao;
 	
 	@Transactional
 	public Grupo adicionar(Grupo grupo) {
@@ -42,5 +46,21 @@ public class CadastroGrupoService {
 	public Grupo buscaOuFalha(Long grupoId) {
 		return grupoRepository.findById(grupoId)
 				.orElseThrow(() -> new GrupoNaoEncontradoException(grupoId));
+	}
+	
+	@Transactional
+	public void desassociarPermissao(Long grupoId, Long permissaoId) {
+		Grupo grupo = buscaOuFalha(grupoId);
+		Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+		
+		grupo.removerPemissao(permissao);
+	}
+	
+	@Transactional
+	public void associarPermissao(Long grupoId, Long permissaoId) {
+		Grupo grupo = buscaOuFalha(grupoId);
+		Permissao permissao = cadastroPermissao.buscarOuFalhar(permissaoId);
+		
+		grupo.adicionaPemissao(permissao);
 	}
 }

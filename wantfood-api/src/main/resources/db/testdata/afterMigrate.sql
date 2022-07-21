@@ -66,10 +66,21 @@ insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('T-B
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Sanduíche X-Tudo', 'Sandubão com muito queijo, hamburger bovino, bacon, ovo, salada e maionese', 19, 1, 5);
 insert into produto (nome, descricao, preco, ativo, restaurante_id) values ('Espetinho de Cupim', 'Acompanha farinha, mandioca e vinagrete', 8, 1, 6);
 
-insert into grupo (nome) values ('Gerente'), ('Vendedor'), ('Secretária'), ('Cadastrador');
+insert into grupo (id, nome) values (1, 'Gerente'), (2, 'Vendedor'), (3, 'Secretária'), (4, 'Cadastrador');
+
+insert into grupo_permissao (grupo_id, permissao_id) values (1, 1), (1, 2), (2, 1), (2, 2), (3, 1); 
 
 insert into usuario (id, nome, email, senha, data_cadastro) values
 (1, 'Lucas Lima', 'lucas.ger@wantfood.com', '123', utc_timestamp),
 (2, 'Maria Joaquina', 'maria.vdd@wantfood.com', '123', utc_timestamp),
 (3, 'Josué Souza', 'josue.aux@wantfood.com', '123', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@wantfood.com', '123', utc_timestamp); 
+
+insert into usuario_grupo (usuario_id, grupo_id) values (1, 1), (1, 2), (1,4), (2, 2), (3,3), (4,4);
+
+delete from restaurante_usuario_responsavel;
+
+insert into usuario (id, nome, email, senha, data_cadastro) values
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp);
+
+insert into restaurante_usuario_responsavel (restaurante_id, usuario_id) values (1, 5), (3, 5);

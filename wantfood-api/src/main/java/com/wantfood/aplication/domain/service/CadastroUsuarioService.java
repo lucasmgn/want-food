@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.wantfood.aplication.domain.exception.NegocioException;
 import com.wantfood.aplication.domain.exception.UsuarioNaoEncontradoException;
+import com.wantfood.aplication.domain.model.Grupo;
 import com.wantfood.aplication.domain.model.Usuario;
 import com.wantfood.aplication.domain.repository.UsuarioRepository;
 
@@ -17,6 +18,9 @@ public class CadastroUsuarioService {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	private CadastroGrupoService cadastroGrupo;
 	
 	@Transactional
 	public Usuario salvar(Usuario usuario) {
@@ -52,4 +56,20 @@ public class CadastroUsuarioService {
         return usuarioRepository.findById(usuarioId)
             .orElseThrow(() -> new UsuarioNaoEncontradoException(usuarioId));
     } 
+    
+    @Transactional
+    public void desassociarGrupo(Long usuarioId, Long grupoId) {
+    	Usuario usuario = buscarOuFalhar(usuarioId);
+    	Grupo grupo = cadastroGrupo.buscaOuFalha(grupoId);
+    	
+    	usuario.removerGrupo(grupo);
+    }
+    
+    @Transactional
+    public void associarGrupo(Long usuarioId, Long grupoId) {
+    	Usuario usuario = buscarOuFalhar(usuarioId);
+    	Grupo grupo = cadastroGrupo.buscaOuFalha(grupoId);
+    	
+    	usuario.adicionarGrupo(grupo);
+    }
 }

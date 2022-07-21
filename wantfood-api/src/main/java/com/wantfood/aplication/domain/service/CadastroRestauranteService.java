@@ -10,6 +10,7 @@ import com.wantfood.aplication.domain.model.Cidade;
 import com.wantfood.aplication.domain.model.Cozinha;
 import com.wantfood.aplication.domain.model.FormaPagamento;
 import com.wantfood.aplication.domain.model.Restaurante;
+import com.wantfood.aplication.domain.model.Usuario;
 import com.wantfood.aplication.domain.repository.RestauranteRepository;
 
 @Service
@@ -26,6 +27,9 @@ public class CadastroRestauranteService {
 	
 	@Autowired
 	private CadastroFormaPagamentoService cadastroFormaPagamentoService;
+	
+	@Autowired
+	private CadastroUsuarioService cadastroUsuario;
 	
 	@Transactional //todos os metodos public que altereram o bd são anotados com o @Transactional
 	public Restaurante adicionar(Restaurante restaurante) {
@@ -90,6 +94,22 @@ public class CadastroRestauranteService {
 	    Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 	    
 	    restauranteAtual.fechar();
-	}     
+	}
+	
+	@Transactional
+	public void desassociarResponsavel(Long restauranteId, Long usuarioId) {
+	    Restaurante restaurante = buscarOuFalhar(restauranteId);
+	    Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+	    
+	    restaurante.removerResponsavel(usuario);
+	}
+
+	@Transactional
+	public void associarResponsavel(Long restauranteId, Long usuarioId) {
+	    Restaurante restaurante = buscarOuFalhar(restauranteId);
+	    Usuario usuario = cadastroUsuario.buscarOuFalhar(usuarioId);
+	    
+	    restaurante.adicionarResponsavel(usuario);
+	}
 	
 }
