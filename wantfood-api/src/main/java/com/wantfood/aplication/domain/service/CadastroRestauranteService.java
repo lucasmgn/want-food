@@ -1,5 +1,7 @@
 package com.wantfood.aplication.domain.service;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ public class CadastroRestauranteService {
 		return restauranteRepository.save(restaurante);
 	}
 	
+	//ativando restaurante
 	@Transactional
 	public void ativar(Long restauranteId) {
 		//Ela será salva
@@ -52,10 +55,23 @@ public class CadastroRestauranteService {
 		restauranteAtual.ativar();
 	}
 	
+	//desativando restaurante
 	@Transactional
 	public void desativar(Long restauranteId) {
 		Restaurante restauranteAtual = buscarOuFalhar(restauranteId);
 		restauranteAtual.desativar();
+	}
+
+	
+	@Transactional //para colocar todas as operações de transação em massa, não ter nenhuma inconsistência
+	public void ativarTodosRestaurantes(List<Long> restauranteIds) {
+		//chamando o metodo ativar para a lista restaurantesIds
+	    restauranteIds.forEach(this::ativar);
+	}
+	
+	@Transactional 
+	public void desativarTodosRestaurantes(List<Long> restauranteIds) {
+	    restauranteIds.forEach(this::desativar);
 	}
 	
 	//desvinculando forma de pagamento do restaurante
@@ -111,5 +127,7 @@ public class CadastroRestauranteService {
 	    
 	    restaurante.adicionarResponsavel(usuario);
 	}
+	
+	
 	
 }

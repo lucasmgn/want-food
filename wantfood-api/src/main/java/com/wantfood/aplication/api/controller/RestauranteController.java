@@ -23,6 +23,7 @@ import com.wantfood.aplication.api.model.input.RestauranteInputDTO;
 import com.wantfood.aplication.domain.exception.CidadeNaoEncontradaException;
 import com.wantfood.aplication.domain.exception.CozinhaNaoEncontradaException;
 import com.wantfood.aplication.domain.exception.NegocioException;
+import com.wantfood.aplication.domain.exception.RestauranteNaoEncontradoException;
 import com.wantfood.aplication.domain.model.Restaurante;
 import com.wantfood.aplication.domain.repository.RestauranteRepository;
 import com.wantfood.aplication.domain.service.CadastroRestauranteService;
@@ -101,6 +102,28 @@ public class RestauranteController {
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void desativar(@PathVariable Long restauranteId) {
 		cadastroRestauranteService.desativar(restauranteId);
+	}
+	
+	// Irei escolher quais restaurantes em massa serão ativados pelo id ex: [1, 2, 3]
+	@PutMapping("/ativacoes")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void ativarTodosRestaurantesController(@RequestBody List<Long> restauranteIds) {
+		try {
+			cadastroRestauranteService.ativarTodosRestaurantes(restauranteIds);
+		}catch(RestauranteNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+	}
+	
+	@DeleteMapping("/ativacoes")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void desativarTodosRestaurantesController(@RequestBody List<Long> restauranteIds) {
+		try {
+			cadastroRestauranteService.desativarTodosRestaurantes(restauranteIds);
+		}catch(RestauranteNaoEncontradoException e) {
+			throw new NegocioException(e.getMessage(), e);
+		}
+		
 	}
 	
 	@PutMapping("/{restauranteId}/abertura")
