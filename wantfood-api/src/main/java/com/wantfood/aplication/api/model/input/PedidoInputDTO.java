@@ -1,10 +1,10 @@
 package com.wantfood.aplication.api.model.input;
 
-import java.math.BigDecimal;
+import java.util.List;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -13,16 +13,20 @@ import lombok.Setter;
 @Setter
 public class PedidoInputDTO {
 	
-	@NotBlank
-	private String nome;
-	
-	@NotBlank
-	private String descricao;
-	
+	@Valid
 	@NotNull
-	@PositiveOrZero
-	private BigDecimal preco;
+	private RestauranteIdInputDTO restaurante;
 	
+	@Valid
 	@NotNull
-	private Boolean ativo;
+	private FormaPagamentoIdInputDTO formaPagamento;
+	
+	@Valid
+	@NotNull
+	private EnderecoInputDTO enderecoEntrega;
+	
+	@Valid
+	@Size(min = 1)
+	@NotNull
+	private List<ItemPedidoInputDTO> itens;
 }

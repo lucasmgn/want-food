@@ -5,7 +5,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
 import com.wantfood.aplication.api.model.EnderecoDTO;
+import com.wantfood.aplication.api.model.input.ItemPedidoInputDTO;
 import com.wantfood.aplication.domain.model.Endereco;
+import com.wantfood.aplication.domain.model.ItemPedido;
 
 @Component
 public class ModelMapperConfig {
@@ -25,6 +27,9 @@ public class ModelMapperConfig {
 				enderecoSrc -> enderecoSrc.getCidade().getEstado().getNome(),
 					(enderecoDTODest, value) -> enderecoDTODest.getCidade().setEstado((String) value));
 		
-		return modelMapper;
+		modelMapper.createTypeMap(ItemPedidoInputDTO.class, ItemPedido.class)
+	    .addMappings(mapper -> mapper.skip(ItemPedido::setId)); 
+		
+		return modelMapper; 
 	}
 }

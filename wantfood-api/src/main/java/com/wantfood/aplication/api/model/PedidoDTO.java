@@ -24,5 +24,5 @@ public class PedidoDTO {
 	private FormaPagamentoDTO formaPagamento;
 	private RestauranteResumoDTO restaurante;
 	private UsuarioDTO cliente;
-	private List<ItemPedidoDTO> itensPedidos; 
+	private List<ItemPedidoDTO> itens; 
 }
