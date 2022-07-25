@@ -26,6 +26,7 @@ import com.wantfood.aplication.domain.model.Cidade;
 import com.wantfood.aplication.domain.repository.CidadeRepository;
 import com.wantfood.aplication.domain.service.CadastroCidadeService;
 
+//End - points
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {
