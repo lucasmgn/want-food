@@ -47,6 +47,30 @@ public class PedidoController {
 	@Autowired
 	private PedidoInputDisassembler pedidoInputDisassembler;
 	
+
+	/*
+	 * Deixando dinâmico as requisição, aparecendo o json apenas do que é colocado no params
+	 * @RequestParam(required = false), indica que não é obrigatório colocar o Param
+	 * */
+//	@GetMapping
+//	public MappingJacksonValue listar(@RequestParam(required = false) String campos){
+//		List<Pedido> todosPedidos = pedidoRepository.findAll();
+//		List<PedidoResumoDTO> pedidosDTO = pedidoResumoDTOAssembler.toCollectionModel(todosPedidos);
+//		
+//		MappingJacksonValue pedidosWrapper = new MappingJacksonValue(pedidosDTO);
+//		
+//		SimpleFilterProvider filterProvider = new SimpleFilterProvider();
+//		filterProvider.addFilter("pedidoFilter", SimpleBeanPropertyFilter.serializeAll());
+//		
+//		if (StringUtils.isNotBlank(campos)) {
+//			filterProvider.addFilter("pedidoFilter",
+//					SimpleBeanPropertyFilter.filterOutAllExcept(campos.split(",")));
+//		}
+//		
+//		pedidosWrapper.setFilters(filterProvider);
+//		
+//		return pedidosWrapper;
+//	}
 	
 	@GetMapping
 	public List<PedidoResumoDTO> listar(){

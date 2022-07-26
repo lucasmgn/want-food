@@ -6,6 +6,7 @@ import java.time.OffsetDateTime;
 import lombok.Getter;
 import lombok.Setter;
 
+//@JsonFilter("pedidoFilter") Remover pois dar error quando utiliza o Squiggly 
 @Getter
 @Setter
 public class PedidoResumoDTO {

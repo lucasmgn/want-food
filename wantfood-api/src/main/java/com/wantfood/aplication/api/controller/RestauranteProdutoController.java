@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -44,11 +45,28 @@ public class RestauranteProdutoController {
     @Autowired
     private ProdutoInputDisassembler produtoInputDisassembler;
 	
+    /*
+     * @RequestParam (required = false) boolean incluiinativos
+     * Fazendo a lsitagem de todos os produtos ou trazendo apenas os que tem a 
+     * propriedade ativa
+     * (key = incluirInativos value = true), imprime todos os produtos até os inativos,
+     * caso não seja selecionada ou marcada como false, mostrará apenas os produtos que estão
+     * com a propriedade ativo = true
+     * 
+     * */
     @GetMapping
-    public List<ProdutoDTO> listar(@PathVariable Long restauranteId) {
+    public List<ProdutoDTO> listar(@PathVariable Long restauranteId,
+    		@RequestParam (required = false) boolean incluirInativos){
+    	
         Restaurante restaurante = cadastroRestaurante.buscarOuFalhar(restauranteId);
         
-        List<Produto> todosProdutos = produtoRepository.findByRestaurante(restaurante);
+        List<Produto> todosProdutos = null;
+        
+        if(incluirInativos) {
+        	todosProdutos = produtoRepository.findByRestaurante(restaurante);
+        }else {
+        	todosProdutos = produtoRepository.findAtivoByRestaurante(restaurante);
+        }
         
         return produtoModelAssembler.toCollectionModel(todosProdutos);
     }
