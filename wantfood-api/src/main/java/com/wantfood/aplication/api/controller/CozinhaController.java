@@ -72,9 +72,11 @@ public class CozinhaController {
 	 * */
 	@GetMapping
 	public Page<CozinhaDTO> listar(@PageableDefault(size = 3) Pageable pageable) {
+		
 		Page<Cozinha> cozinhasPages = cozinhaRepository.findAll(pageable);
 		
-		List<CozinhaDTO> cozinhaDTO = cozinhaDTOAssembler.toCollectionModel(cozinhasPages.getContent());
+		List<CozinhaDTO> cozinhaDTO = cozinhaDTOAssembler.toCollectionModel
+				(cozinhasPages.getContent());
 		
 		//Instanciando um new PageImpl, passando a lista cozinhaDTO,
 		//pegeable e o total de elementos da page

@@ -16,10 +16,17 @@ public class PedidoSpecs {
 	public static Specification<Pedido> usandoFiltro(PedidoFilter filter){
 		return (root, query, criteriaBuilder) ->{
 			
-			//Resolvendo problemas de multiplos selects (N+1)
-			root.fetch("restaurante").fetch("cozinha");
-			root.fetch("cliente");
-			
+			/*
+			 * Verificando que se o ResultType dele for do tipo pedido, então ele fará os fetch,
+			 * evitando o org.hibernate.QueryException, ja que estou fazend paginação
+			 *  no metodo pesquisar de pedido
+			 * */
+			if(Pedido.class.equals(query.getResultType())) {
+				//Resolvendo problemas de multiplos selects (N+1)
+				root.fetch("restaurante").fetch("cozinha");
+				root.fetch("cliente");
+			}
+
 			var predicates = new ArrayList<Predicate>();
 			
 			if(filter.getClienteId() != null) {
