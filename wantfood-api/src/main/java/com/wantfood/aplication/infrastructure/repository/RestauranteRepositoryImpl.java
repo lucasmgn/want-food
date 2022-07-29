@@ -33,6 +33,7 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 	@Autowired @Lazy
 	private RestauranteRepository restauranteRepository;
 	
+	//Utilizando JPQL
 //	@Override
 //	public List<Restaurante> find(String nome, BigDecimal freteInicial, BigDecimal freteFinal){
 //		
@@ -63,14 +64,28 @@ public class RestauranteRepositoryImpl implements RestauranteRepositoryQueries {
 //		return query.getResultList();
 //	}
 	
+	//Utilizando Criteria
 	@Override
 	public List<Restaurante> find(String nome, BigDecimal freteInicial, BigDecimal freteFinal){
 		
+		/*
+		 * Usado para construir consultas de critérios, seleções compostas, expressões,
+		 * predicados, ordenações.
+		 * 
+		 * Observe que Predicate é usado em vez de Expression<Boolean> nesta API para contornar o fato
+		 *  de que Javagenerics não é compatível com varags.
+		 * */
 		CriteriaBuilder builder = entityManager.getCriteriaBuilder();
 		
+		//Responsável por implementar uma estrutura de uma query
 		CriteriaQuery<Restaurante> criteria = builder.createQuery(Restaurante.class);
 		Root<Restaurante> root = criteria.from(Restaurante.class);
 		
+		/*
+		 * Predicado é um filtro, O tipo de um predicado simples ou composto:
+		 *  uma conjunção ou disjunção de restrições.
+		 * Um predicado simples é considerado uma conjunção com um único conjunto.
+		 * */ 
 		var predicates = new ArrayList<Predicate>();
 		
 		if(StringUtils.hasText(nome)) {

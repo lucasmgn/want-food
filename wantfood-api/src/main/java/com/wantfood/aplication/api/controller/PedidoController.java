@@ -25,7 +25,9 @@ import com.wantfood.aplication.domain.exception.NegocioException;
 import com.wantfood.aplication.domain.model.Pedido;
 import com.wantfood.aplication.domain.model.Usuario;
 import com.wantfood.aplication.domain.repository.PedidoRepository;
+import com.wantfood.aplication.domain.repository.filter.PedidoFilter;
 import com.wantfood.aplication.domain.service.CadastroPedidoService;
+import com.wantfood.aplication.infrastructure.repository.spec.PedidoSpecs;
 
 @RestController
 @RequestMapping("/pedidos")
@@ -72,9 +74,10 @@ public class PedidoController {
 //		return pedidosWrapper;
 //	}
 	
+	//Colocado a classe pedido filter como paremetro para fazer filtragem nas pesquisas
 	@GetMapping
-	public List<PedidoResumoDTO> listar(){
-		List<Pedido> todosPedidos = pedidoRepository.findAll();
+	public List<PedidoResumoDTO> pesquisar(PedidoFilter filter){
+		List<Pedido> todosPedidos = pedidoRepository.findAll(PedidoSpecs.usandoFiltro(filter));
 		
 		return pedidoResumoDTOAssembler.toCollectionModel(todosPedidos);	
 	}
