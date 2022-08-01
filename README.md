@@ -18,4 +18,7 @@
   <li>Docker</li>
   <li>Aws</li>
   <li>Postman</li>
+  <li>Lombok</li>
+  <li>Squiggly</li>
+  <li>JasperSoft Studio</li>
 </ul>
