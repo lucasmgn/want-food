@@ -28,10 +28,10 @@ import com.wantfood.aplication.api.model.input.PedidoInputDTO;
 import com.wantfood.aplication.core.data.PageableTranslator;
 import com.wantfood.aplication.domain.exception.EntidadeNaoEncontradaException;
 import com.wantfood.aplication.domain.exception.NegocioException;
+import com.wantfood.aplication.domain.filter.PedidoFilter;
 import com.wantfood.aplication.domain.model.Pedido;
 import com.wantfood.aplication.domain.model.Usuario;
 import com.wantfood.aplication.domain.repository.PedidoRepository;
-import com.wantfood.aplication.domain.repository.filter.PedidoFilter;
 import com.wantfood.aplication.domain.service.CadastroPedidoService;
 import com.wantfood.aplication.infrastructure.repository.spec.PedidoSpecs;
 

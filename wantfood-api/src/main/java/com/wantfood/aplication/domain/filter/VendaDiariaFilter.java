@@ -1,4 +1,4 @@
-package com.wantfood.aplication.domain.repository.filter;
+package com.wantfood.aplication.domain.filter;
 
 import java.time.OffsetDateTime;
 
@@ -8,13 +8,10 @@ import org.springframework.format.annotation.DateTimeFormat.ISO;
 import lombok.Getter;
 import lombok.Setter;
 
-//Classe DTO que representará propriedades que serão feitas consultas, filtros de pesquisa
-@Getter
 @Setter
-public class PedidoFilter {
+@Getter
+public class VendaDiariaFilter {
 	
-	//Fazendo consulta de pedidos passando um dos seguintes atributos
-	private Long clienteId;  
 	private Long restauranteId;  
 	
 	//para n dar exception, problemas em transformar a string em um offsetDateTime
@@ -22,6 +19,5 @@ public class PedidoFilter {
 	private OffsetDateTime dataCriacaoInicio;  
 	
 	@DateTimeFormat(iso = ISO.DATE_TIME) 
-	private OffsetDateTime dataCriacaoFim;  
-	
+	private OffsetDateTime dataCriacaoFim; 
 }
