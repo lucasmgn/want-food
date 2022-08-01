@@ -1,4 +1,4 @@
-package com.wantfood.aplication.infrastructure.service;
+package com.wantfood.aplication.infrastructure.service.query;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,6 +26,7 @@ public class VendaQueryImpl implements VendaQueryService{
 	public List<VendaDiaria> consultarVendasDiarias(VendaDiariaFilter filter, 
 			String timeOffset) {
 		
+		//Utilizando criteria builder para buscar os dados no bd
 		var builder = manager.getCriteriaBuilder();
 		var query = builder.createQuery(VendaDiaria.class); // tipo de consulta que ela retorna
 		var root = query.from(Pedido.class);	
