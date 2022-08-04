@@ -1,45 +1,55 @@
 package com.wantfood.aplication.api.controller;
 
-import java.nio.file.Path;
-import java.util.UUID;
-
 import javax.validation.Valid;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.wantfood.aplication.api.assembler.FotoProdutoDTOAssembler;
+import com.wantfood.aplication.api.model.FotoProdutoDTO;
 import com.wantfood.aplication.api.model.input.FotoProdutoInput;
+import com.wantfood.aplication.domain.model.FotoProduto;
+import com.wantfood.aplication.domain.model.Produto;
+import com.wantfood.aplication.domain.service.CadastroProdutoService;
+import com.wantfood.aplication.domain.service.CatalogoFotoProtudoService;
 
 @RestController
 @RequestMapping("/restaurantes/{restauranteId}/produtos/{produtoId}/foto")
 public class RestauranteProdutoFotoControler {
 	
-	//Criando metodo para carregar foto do produto
-	//Coloquei o MultipartFile e a descricao, em uma classe input para diminuir os paremetros
+	@Autowired
+	private CatalogoFotoProtudoService fotoProdutoService;
+	
+	@Autowired
+	private CadastroProdutoService service;
+	
+	@Autowired
+	private FotoProdutoDTOAssembler assembler;
+	
+	
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public void atualizarFoto(@PathVariable Long restauranteId,
+	public FotoProdutoDTO atualizarFoto(@PathVariable Long restauranteId,
 			@PathVariable Long produtoId, @Valid FotoProdutoInput fotoProdutoInput) {
 		
-		//Nome do arquivo 
-		var nomeArquivo = UUID.randomUUID().toString() + "_" + 
-		fotoProdutoInput.getArquivo().getOriginalFilename();
+		Produto produto = service.buscaOuFalha(restauranteId, produtoId);
 		
-		//Colocando local do arquivo
-		var arquivoFoto = Path.of(
-				"/Users/lucas/OneDrive/Área de Trabalho/Programação/foto-wantfood", nomeArquivo);
+		MultipartFile file = fotoProdutoInput.getArquivo();
 		
-		System.out.println(arquivoFoto);
-		System.out.println(fotoProdutoInput.getDescricao());
-		System.out.println(fotoProdutoInput.getArquivo().getContentType());
+		FotoProduto fotoProduto = new FotoProduto();
+		fotoProduto.setProduto(produto);
+		fotoProduto.setDescricao(fotoProdutoInput.getDescricao());
+		fotoProduto.setContentType(file.getContentType());
+		fotoProduto.setTamanho(file.getSize());
+		fotoProduto.setNomeArquivo(file.getOriginalFilename());
 		
-		try {
-			fotoProdutoInput.getArquivo().transferTo(arquivoFoto);
-		} catch (Exception e) {
-
-			e.printStackTrace();
-		}
+		FotoProduto foto = fotoProdutoService.salvar(fotoProduto);
+		FotoProdutoDTO fotoAssembler = assembler.toModel(foto);
+		
+		return fotoAssembler;
 	}
 }
