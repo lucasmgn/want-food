@@ -23,7 +23,7 @@ public class FotoProdutoInput {
 	 * Criando uma anotação para colocar o valor max
 	 * */
 	@NotNull
-	@FileSize(max = "50KB")
+	@FileSize(max = "150KB")
 	@FileContentType(allowed = { MediaType.IMAGE_JPEG_VALUE, MediaType.IMAGE_PNG_VALUE })
 	private MultipartFile arquivo;
 	
