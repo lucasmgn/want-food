@@ -120,6 +120,13 @@
     		<version>6.19.1</version>
 		</dependency>
 		
+		<!-- Dependencia do sdk para usar o s3 da amazon-->
+		<dependency>
+    		<groupId>com.amazonaws</groupId>
+    		<artifactId>aws-java-sdk-s3</artifactId>
+    		<version>1.11.671</version>
+   		</dependency>
+		
 	</dependencies>
 
 	<build>
