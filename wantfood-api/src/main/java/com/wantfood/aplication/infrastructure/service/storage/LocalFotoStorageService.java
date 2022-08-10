@@ -8,8 +8,7 @@ import org.springframework.util.FileCopyUtils;
 
 import com.wantfood.aplication.core.storage.StorageProperties;
 import com.wantfood.aplication.domain.service.FotoStorageService;
-
-//@Service	
+	
 public class LocalFotoStorageService implements FotoStorageService{
 	
 	@Autowired
