@@ -127,6 +127,11 @@
     		<version>1.11.671</version>
    		</dependency>
 		
+		<!-- Dependencia para envio de emails-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -143,6 +148,10 @@
 		 -->
 		 	<plugin>
 				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
