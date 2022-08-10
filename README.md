@@ -21,4 +21,5 @@
   <li>Lombok</li>
   <li>Squiggly</li>
   <li>JasperSoft Studio</li>
+  <li>SendGrid</li>
 </ul>
