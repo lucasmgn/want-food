@@ -51,6 +51,7 @@ public class RestauranteController {
 	@GetMapping
 	public List<RestauranteDTO> listar(){
 		return restauranteDTOAssembler.toCollectionModel(restauranteRepository.findAll());
+		
 	}
 	
 	@JsonView(RestauranteView.ApenasNome.class)
