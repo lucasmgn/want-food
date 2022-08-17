@@ -16,7 +16,22 @@ import lombok.Setter;
 @ConfigurationProperties("wantfood.email")
 public class EmailProperties {
 	
+	//Colocando envio de e-mail como padrão FAKE
+	private Implementacao impl = Implementacao.FAKE;
+	
+	private Sandbox sandbox = new Sandbox();
+	
 	@NotNull
 	private String remetente;
+	
+	public enum Implementacao{
+		SMTP, FAKE, SANDBOX
+	}
+	
+	@Getter
+	@Setter
+	public class Sandbox{
+		private String destinatario;
+	}
 
 }

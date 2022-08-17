@@ -1,11 +1,11 @@
 package com.wantfood.aplication.infrastructure.service.email;
 
+import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.stereotype.Service;
 import org.springframework.ui.freemarker.FreeMarkerTemplateUtils;
 
 import com.wantfood.aplication.core.email.EmailProperties;
@@ -14,7 +14,7 @@ import com.wantfood.aplication.domain.service.EnvioEmailService;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 
-@Service
+//@Service
 public class SmtpEnvioEmailService implements EnvioEmailService{
 
 	//Instancia para enviar e-mail
@@ -30,7 +30,16 @@ public class SmtpEnvioEmailService implements EnvioEmailService{
 	
 	@Override
 	public void enviar(Mensagem mensagem) {
-		try {
+	    try {
+	        MimeMessage mimeMessage = criarMimeMessage(mensagem);
+	        
+	        mailSender.send(mimeMessage);
+	    } catch (Exception e) {
+	        throw new EmailException("Não foi possível enviar e-mail", e);
+	    }
+	}
+	
+	protected MimeMessage criarMimeMessage(Mensagem mensagem) throws MessagingException {
 			String corpo = processarTemplate(mensagem);
 			
 			MimeMessage mimeMessage = mailSender.createMimeMessage();
@@ -41,14 +50,10 @@ public class SmtpEnvioEmailService implements EnvioEmailService{
 			helper.setSubject(mensagem.getAssunto());
 			helper.setText(corpo, true); //true indicando qeu o texto é em html
 			
-			mailSender.send(mimeMessage);
-			
-		} catch (Exception e) {
-			throw new EmailException("Não foi possivel enviar e-mail", e);
-		}
+			return mimeMessage;
 	}
 	
-	private String processarTemplate(Mensagem mensagem) {
+	protected String processarTemplate(Mensagem mensagem) {
 		try {
 			Template template = freemarkerConfig.getTemplate(mensagem.getCorpo());
 			
