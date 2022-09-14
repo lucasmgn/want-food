@@ -1,11 +1,14 @@
 package com.wantfood.aplication.api.controller;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,19 +43,60 @@ public class FormaPagamentoController {
 	@Autowired
 	private FormaPagamentoInputDisassembler formaPagamentoInputDisassembler;
 	
-	@GetMapping //Mapeando o metodo listar para quando fizerem uma requisição get
-	public List<FormaPagamentoDTO> listar(){
+	
+	/*
+	 * Mapeando o metodo listar para quando fizerem uma requisição get
+	 * Retornando um ResponseEntity de uma lista de forma de pagamento para poder alterar
+	 * o cabeçalho da resposta
+	 * 
+	 * Colocando um cache no cabeçalho para deixar em cache por 10 s, para não precisar fazer novos 
+	 * selects durante esse tempo
+	 * 
+	 * ------------------------- No return do método -------------------------
+	 * 
+	 * .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()), deixa o cache 
+	 * restrito apenas para amarzenar no cahce local
+	 *
+	 * .cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachPublic()), deixa o cache publico
+	 * para armazenar no cache compartilhado e local
+	 * 
+	 * .cacheControl(CacheControl.noCache()), valida toda a vez que é feito a requisição,
+	 * por exemplo, a validação sem onoCahce ocorre quando o estado do cache se torna stale,
+	 * porém com o noCache, a validação ocorro toda vez que é feita uma requisição.
+	 * 
+	 * .cacheControl(CacheControl.noStore()), não permite que nenhuma resposta seja salva
+	 * em nenhum cache
+	 * */
+	@GetMapping
+	public ResponseEntity<List<FormaPagamentoDTO>> listar(){
 		List<FormaPagamento> todasFormaPagamento = formaPagamentoRepository.findAll();
 		
-		return formaPagamentoDTOAssembler.toCollectionModel(todasFormaPagamento);
+		List<FormaPagamentoDTO> formasPagamentoModel = formaPagamentoDTOAssembler
+				.toCollectionModel(todasFormaPagamento);
+
+		return ResponseEntity.ok()
+//				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
+//				.cacheControl(CacheControl.noCache())
+//				.cacheControl(CacheControl.noStore())
+				.body(formasPagamentoModel);
 	}
 	
+	/*
+	 * Adicionando um cabeçalho de resposta, colocando os dados em uma cache durante 10 segundos
+	 * testando pelo Talend API Tester extensão do chrome
+	 * */
 	@GetMapping("/{formaPagamentoId}")
-	public FormaPagamentoDTO buscar(@PathVariable Long formaPagamentoId){
+	public ResponseEntity<FormaPagamentoDTO> buscar(@PathVariable Long formaPagamentoId){
 		
 		FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscaOuFalha(formaPagamentoId);
 		
-		return formaPagamentoDTOAssembler.toModel(formaPagamento);
+		FormaPagamentoDTO formaPagamentoModel = formaPagamentoDTOAssembler.toModel(formaPagamento);
+		
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+				.body(formaPagamentoModel);
 	}
 	
 	@PostMapping

@@ -130,7 +130,7 @@ public class RestauranteProdutoFotoControler {
 		
 		//Se pelo menos um for compativel retornar true
 		boolean compativel = listaAceitas.stream()
-						.anyMatch(mediaAceita -> mediaAceita.isCompatibleWith(media));
+				.anyMatch(mediaAceita -> mediaAceita.isCompatibleWith(media));
 		
 		if(!compativel) {
 			throw new HttpMediaTypeNotAcceptableException(listaAceitas);

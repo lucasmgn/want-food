@@ -150,7 +150,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 
 	    String detail = String.format("O recurso %s, que você tentou acessar, é inexistente.", 
 	            e.getRequestURL());
-
+	    
 	    Problem problem = createProblemBuilder(status, problemType, detail).build();
 
 	    return handleExceptionInternal(e, problem, headers, status, request);
@@ -338,7 +338,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 				.status(status.value())
 				.type(problemType.getUri())
 				.title(problemType.getTitle())
-				.detail(detail);
+				.detail(detail)
+				.userMessage(USER_MESSAGE);
 	}
 
 	
