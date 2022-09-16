@@ -1,5 +1,4 @@
 package com.wantfood.aplication.api.controller;
-//a
 import java.util.List;
 
 import javax.validation.Valid;
@@ -26,7 +25,20 @@ import com.wantfood.aplication.domain.model.Cidade;
 import com.wantfood.aplication.domain.repository.CidadeRepository;
 import com.wantfood.aplication.domain.service.CadastroCidadeService;
 
-//End - points
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
+/*
+ * 
+ * @Api(tags = "Cidades") anotação para marcar o controlador como recuso do swagger
+ * @ApiOperation("Lista as cidades") Mudando o nome do metodo na page do Swagger
+ * @ApiParam(value = "ID de uma cidade") alterando a descrição no swagger
+ * 
+ * Não funciona pois o OAS_30 não tem descriçao nenhuma
+ * @ApiParam(name = "corpo", value = "Representação de uma nova cidade"), alterando o body
+ * */
+@Api(tags = "Cidades")
 @RestController
 @RequestMapping(value = "/cidades")
 public class CidadeController {
@@ -43,6 +55,7 @@ public class CidadeController {
 	@Autowired
 	private CidadeInputDisassembler cidadeInputDisassembler;
 	
+	@ApiOperation("Lista as cidades")
 	@GetMapping
 	public List<CidadeDTO> listar() {
 		List<Cidade> todasCidades = cidadeRepository.findAll();
@@ -50,16 +63,19 @@ public class CidadeController {
 		return cidadeDTOAssembler.toCollectionModel(todasCidades);
 	}
 	
+	@ApiOperation("Busca uma cidade por ID")
 	@GetMapping("/{cidadeId}")
-	public CidadeDTO buscar(@PathVariable Long cidadeId) {
+	public CidadeDTO buscar(@ApiParam(value = "ID de uma cidade") @PathVariable Long cidadeId) {
 	Cidade cidade = cadastroCidade.buscarOuFalhar(cidadeId);
 		
 		return cidadeDTOAssembler.toModel(cidade);
 	}
 	
+	@ApiOperation("Cadastra uma cidade")
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public CidadeDTO adicionar(@RequestBody @Valid CidadeInputDTO cidadeInputDTO) {
+	public CidadeDTO adicionar(@ApiParam(name = "corpo", value = "Representação de uma nova cidade") 
+			@RequestBody @Valid CidadeInputDTO cidadeInputDTO) {
 		
 		try {
 			Cidade cidade = cidadeInputDisassembler.toDomainObject(cidadeInputDTO);
@@ -72,6 +88,7 @@ public class CidadeController {
 		}
 	}
 	
+	@ApiOperation("Atualiza uma cidade por ID")
 	@PutMapping("/{cidadeId}")
 	public CidadeDTO atualizar(@PathVariable Long cidadeId,
 			@RequestBody @Valid CidadeInputDTO cidadeInputDTO) {
@@ -89,6 +106,7 @@ public class CidadeController {
 		}	
 	}
 	
+	@ApiOperation("Exclui uma cidade por ID")
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cidadeId) {
