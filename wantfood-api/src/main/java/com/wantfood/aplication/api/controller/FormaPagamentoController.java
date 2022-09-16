@@ -1,5 +1,6 @@
 package com.wantfood.aplication.api.controller;
 
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.wantfood.aplication.api.assembler.FormaPagamentoDTOAssembler;
 import com.wantfood.aplication.api.assembler.FormaPagamentoInputDisassembler;
@@ -66,20 +69,42 @@ public class FormaPagamentoController {
 	 * 
 	 * .cacheControl(CacheControl.noStore()), não permite que nenhuma resposta seja salva
 	 * em nenhum cache
+	 * 
+	 * if(request.checkNotModified(eTag)) pegará do cabeçalho da requisição e fará a comparação do
+	 * if-none-macth com esse eTag. Se retornar null, não irá precisar fazer o processo, já que o
+	 * eTag(ataAtualizacao) é igual a data que está do BD
+	 * 
+	 * Enquanto não mudar os dados de FormaPagamento ele irá somente validar, não refazendo
+	 * todo o select da tabela
 	 * */
+	
 	@GetMapping
-	public ResponseEntity<List<FormaPagamentoDTO>> listar(){
+	public ResponseEntity<List<FormaPagamentoDTO>> listar(ServletWebRequest request){
+		//Desabilitando o Shallow Etag para poder utilizar o Deep ETags
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		
+		//Se retornar nulo, a eTag será igual a 0
+		String eTag = "0";
+			
+		OffsetDateTime dataUltimaAtualizacao = formaPagamentoRepository.getDataUltimaAtualizacao();
+		
+		if(dataUltimaAtualizacao != null) {
+			//Retorna o numero de segundos desde 1970, transformando em String
+			eTag = String.valueOf(dataUltimaAtualizacao.toEpochSecond());
+		}
+		
+		if(request.checkNotModified(eTag)) {
+			return null;
+		}
+		
 		List<FormaPagamento> todasFormaPagamento = formaPagamentoRepository.findAll();
 		
 		List<FormaPagamentoDTO> formasPagamentoModel = formaPagamentoDTOAssembler
 				.toCollectionModel(todasFormaPagamento);
 
 		return ResponseEntity.ok()
-//				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
-//				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate())
 				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic())
-//				.cacheControl(CacheControl.noCache())
-//				.cacheControl(CacheControl.noStore())
+				.eTag(eTag)
 				.body(formasPagamentoModel);
 	}
 	
@@ -88,7 +113,22 @@ public class FormaPagamentoController {
 	 * testando pelo Talend API Tester extensão do chrome
 	 * */
 	@GetMapping("/{formaPagamentoId}")
-	public ResponseEntity<FormaPagamentoDTO> buscar(@PathVariable Long formaPagamentoId){
+	public ResponseEntity<FormaPagamentoDTO> buscar(@PathVariable Long formaPagamentoId,
+			ServletWebRequest request){
+		
+		ShallowEtagHeaderFilter.disableContentCaching(request.getRequest());
+		
+		String eTag = "0";
+		
+		OffsetDateTime dataAtualizacao = formaPagamentoRepository
+	            .getDataUltimaAtualizacaoById(formaPagamentoId);
+		
+		if(dataAtualizacao != null) {
+			eTag = String.valueOf(dataAtualizacao.toEpochSecond()); 
+		}
+		if(request.checkNotModified(eTag)){
+			return null;
+		}
 		
 		FormaPagamento formaPagamento = cadastroFormaPagamentoService.buscaOuFalha(formaPagamentoId);
 		
