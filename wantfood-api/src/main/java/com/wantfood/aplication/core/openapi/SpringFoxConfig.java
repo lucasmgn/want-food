@@ -2,8 +2,10 @@ package com.wantfood.aplication.core.openapi;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Import;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -14,9 +16,18 @@ import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
+/*
+ * @EnableSwagger2 Vai habilitar o suporte ao swagger 2
+ * 
+ * @Import(BeanValidatorPluginsConfiguration.class) adicionando a anotação para utilização
+ * das anotações do bean validation
+ * 
+ * @EnableWebMvc para o suporte a serialização de objetos para JSON, XML, etc
+ * */
 @EnableWebMvc
 @Configuration
-@EnableSwagger2 //Vai habilitar o suporte ao swagger 2
+@EnableSwagger2
+@Import(BeanValidatorPluginsConfiguration.class)
 public class SpringFoxConfig {
 	
 	/*

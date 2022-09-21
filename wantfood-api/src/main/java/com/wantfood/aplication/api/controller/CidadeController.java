@@ -90,7 +90,7 @@ public class CidadeController {
 	
 	@ApiOperation("Atualiza uma cidade por ID")
 	@PutMapping("/{cidadeId}")
-	public CidadeDTO atualizar(@PathVariable Long cidadeId,
+	public CidadeDTO atualizar(@ApiParam(value = "ID de uma cidade") @PathVariable Long cidadeId,
 			@RequestBody @Valid CidadeInputDTO cidadeInputDTO) {
 		
 		try {
@@ -109,7 +109,7 @@ public class CidadeController {
 	@ApiOperation("Exclui uma cidade por ID")
 	@DeleteMapping("/{cidadeId}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void remover(@PathVariable Long cidadeId) {
+	public void remover(@ApiParam(value = "ID de uma cidade") @PathVariable Long cidadeId) {
 		cadastroCidade.excluir(cidadeId);
 	}
 }

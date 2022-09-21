@@ -143,9 +143,18 @@
 			<version>3.0.0</version>
 		</dependency>
 
+		<!-- http://localhost:8080/swagger-ui/index.html, link para page do swagger 
+			3.0 -->
 		<dependency>
 			<groupId>io.springfox</groupId>
 			<artifactId>springfox-swagger-ui</artifactId>
+			<version>3.0.0</version>
+		</dependency>
+
+		<!-- Aproveitando a anotação do bean validation para a documentação -->
+		<dependency>
+			<groupId>io.springfox</groupId>
+			<artifactId>springfox-bean-validators</artifactId>
 			<version>3.0.0</version>
 		</dependency>
 	</dependencies>
