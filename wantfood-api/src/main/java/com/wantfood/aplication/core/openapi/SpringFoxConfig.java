@@ -10,6 +10,10 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
+import com.fasterxml.classmate.TypeResolver;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import com.wantfood.aplication.api.exceptionhandler.Problem;
+
 import springfox.documentation.service.Response;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -20,6 +24,7 @@ import springfox.documentation.service.ApiInfo;
 import springfox.documentation.service.Contact;
 import springfox.documentation.service.Tag;
 import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.json.JacksonModuleRegistrar;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
@@ -36,6 +41,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @EnableSwagger2
 @Import(BeanValidatorPluginsConfiguration.class)
 public class SpringFoxConfig {
+
+	//fazer com que o SpringFox carregue o módulo de conversão de datas
+    @Bean
+    JacksonModuleRegistrar springFoxJacksonConfig() {
+        return objectMapper -> objectMapper.registerModule(new JavaTimeModule());
+    }
 	
 	/*
 	 * Page do Swagger
@@ -46,10 +57,18 @@ public class SpringFoxConfig {
 	 * para fazer a referencia
 	 * 
 	 * .useDefaultResponseMessages(false), desabilitando os cod de error padrão e implementando o meu.
+	 * 
 	 * .globalResponses, descreve os codigos de retorno padrão para metodo escolhido(GET)
+	 * 
+	 * additionalModels(tupeResolver.resolve(Problem.class)), adicionando um novo modelo 
+	 * para o springfox escanear, já que ele escaneia apenas controladores e o Problem não
+	 *  está em nenhuma classe de controlador
 	 * */
 	@Bean
 	Docket apiDocket() {
+		
+		var tupeResolver = new TypeResolver();
+		
 		return new Docket(DocumentationType.OAS_30)
 				.select()
 					.apis(RequestHandlerSelectors.basePackage("com.wantfood.aplication.api")) 
@@ -60,6 +79,7 @@ public class SpringFoxConfig {
 					.globalResponses(HttpMethod.POST, globalPutPostResponseMessages())
 					.globalResponses(HttpMethod.PUT, globalPutPostResponseMessages())
 					.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
+					.additionalModels(tupeResolver.resolve(Problem.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"))
 				.tags(new Tag("Cozinhas", "Gerencia as cozinhas"));
