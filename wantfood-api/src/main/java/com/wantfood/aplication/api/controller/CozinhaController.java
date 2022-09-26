@@ -28,6 +28,10 @@ import com.wantfood.aplication.domain.model.Cozinha;
 import com.wantfood.aplication.domain.repository.CozinhaRepository;
 import com.wantfood.aplication.domain.service.CadastroCozinhaService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
+@Api(tags = "Cozinhas")
 //Possui o @ResponsyBody e o @Controller
 @RestController
 @RequestMapping(value = "/cozinhas")
@@ -70,6 +74,7 @@ public class CozinhaController {
 	 *  key = sort e value = [nome da propriedade que será ordenada], por ex: id e nome
 	 *  para ordem descrecente, utiliza o ",desc" depois do nome da propriedade, ex: id,desc
 	 * */
+	@ApiOperation("Lista as cozinhas")
 	@GetMapping
 	public Page<CozinhaDTO> listar(@PageableDefault(size = 3) Pageable pageable) {
 		
@@ -86,6 +91,7 @@ public class CozinhaController {
 		return cozinhaDTOPage;
 	}
 
+	@ApiOperation("Busca uma cozinha por ID")
 	@GetMapping(value = "/{cozinhaId}")
 	public CozinhaDTO buscar(@PathVariable Long cozinhaId) {
 		Cozinha cozinha = cadastroCozinha.buscaOuFalha(cozinhaId);
@@ -93,6 +99,7 @@ public class CozinhaController {
 		return cozinhaDTOAssembler.toModel(cozinha);
 	}
 	
+	@ApiOperation("Cadastra uma cozinha")
 	// Colocando o status como create (status 201), e irá retornar a cozinha criada 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -104,6 +111,7 @@ public class CozinhaController {
 		return cozinhaDTOAssembler.toModel(cozinha);
 	}
 
+	@ApiOperation("Atualiza uma cozinha por ID")
 	@PutMapping("/{cozinhaId}")
 //	@ResponseStatus(HttpStatus.Up)
 	public CozinhaDTO atualizar(@PathVariable Long cozinhaId,
@@ -116,6 +124,7 @@ public class CozinhaController {
 		return cozinhaDTOAssembler.toModel(cozinhaAtual);
 	}
 	
+	@ApiOperation("Exclui uma cozinha por ID")
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cozinhaId){
