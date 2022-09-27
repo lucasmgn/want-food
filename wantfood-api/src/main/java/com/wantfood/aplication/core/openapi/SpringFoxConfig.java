@@ -2,12 +2,14 @@ package com.wantfood.aplication.core.openapi;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.fasterxml.classmate.TypeResolver;
@@ -18,6 +20,7 @@ import springfox.documentation.service.Response;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RepresentationBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.builders.ResponseBuilder;
 import springfox.documentation.service.ApiInfo;
@@ -67,7 +70,7 @@ public class SpringFoxConfig {
 	@Bean
 	Docket apiDocket() {
 		
-		var tupeResolver = new TypeResolver();
+		var typeResolver = new TypeResolver();
 		
 		return new Docket(DocumentationType.OAS_30)
 				.select()
@@ -79,7 +82,7 @@ public class SpringFoxConfig {
 					.globalResponses(HttpMethod.POST, globalPutPostResponseMessages())
 					.globalResponses(HttpMethod.PUT, globalPutPostResponseMessages())
 					.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
-					.additionalModels(tupeResolver.resolve(Problem.class))
+					.additionalModels(typeResolver.resolve(Problem.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"))
 				.tags(new Tag("Cozinhas", "Gerencia as cozinhas"));
@@ -106,22 +109,20 @@ public class SpringFoxConfig {
 				badRequest(),
 				internalServerError(),
 				notAcceptable(),
-				new ResponseBuilder()
-				.code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
-				.description("Requisição recusada porque o corpo está em um formato não suportado")
-				.build()
+				unsupportedMediaType()
 		);
 	}
-
 	
 	//Metodo para representar uma resposta de BadRequest
 	private Response badRequest() {
 		return new ResponseBuilder()
 		.code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
 		.description("Requisição inválida (erro do cliente)")
+		.representation(MediaType.APPLICATION_JSON)
+		.apply(getProblemReferencia())
 		.build();
 	}
-	
+
 	//Metodo para representar uma resposta de notAcceptable
 	private Response notAcceptable() {
 		return new ResponseBuilder()
@@ -135,7 +136,26 @@ public class SpringFoxConfig {
 		return new ResponseBuilder()
 		.code(String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()))
 		.description("Erro interno do servidor")
+		.representation(MediaType.APPLICATION_JSON)
+		.apply(getProblemReferencia())
 		.build();
+	}
+	
+	//Metodo para representar uma resposta de internalServerError
+	private Response unsupportedMediaType() {
+		return new ResponseBuilder()
+		.code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
+		.description("Requisição recusada porque o corpo está em um formato não suportado")
+		.representation(MediaType.APPLICATION_JSON)
+		.apply(getProblemReferencia())
+		.build();
+	}
+	
+	//Gerando referência para classe Problem 
+	private Consumer<RepresentationBuilder> getProblemReferencia() {
+		return r -> r.model(m -> m.name("Problema")
+				.referenceModel(ref -> ref.key( k -> k.qualifiedModelName(q -> q.name("Problema")
+						.namespace("com.wantfood.aplication.api.exceptionhandler")))));
 	}
 	
 	/*
