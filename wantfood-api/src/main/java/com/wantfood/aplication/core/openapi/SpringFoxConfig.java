@@ -85,7 +85,8 @@ public class SpringFoxConfig {
 					.additionalModels(typeResolver.resolve(Problem.class))
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"))
-				.tags(new Tag("Cozinhas", "Gerencia as cozinhas"));
+				.tags(new Tag("Cozinhas", "Gerencia as cozinhas"))
+				.tags(new Tag("Grupos", "Gerencia grupos de usuários"));
 	}
 	
 	//Implementando os codigos de error de todo os métodos GET da aplicação
@@ -96,7 +97,7 @@ public class SpringFoxConfig {
 		);
 	}
 	
-	//Implementando os codigos de error de todo os métodos POST da aplicação
+	//Implementando os codigos de error de todo os métodos Delete da aplicação
 	private List<Response> globalDeleteResponseMessages(){
 		return Arrays.asList(
 				badRequest(),
@@ -104,6 +105,7 @@ public class SpringFoxConfig {
 		);
 	}
 	
+	//Implementando os codigos de error de todo os métodos PUT e POST da aplicação
 	private List<Response> globalPutPostResponseMessages(){
 		return Arrays.asList(
 				badRequest(),
@@ -141,7 +143,7 @@ public class SpringFoxConfig {
 		.build();
 	}
 	
-	//Metodo para representar uma resposta de internalServerError
+	//Metodo para representar uma resposta de UNSUPPORTED_MEDIA_TYPE
 	private Response unsupportedMediaType() {
 		return new ResponseBuilder()
 		.code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
