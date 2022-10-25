@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.wantfood.aplication.api.exceptionhandler.Problem;
+import com.wantfood.aplication.core.openapi.model.PageableModelOpenApi;
 
 import springfox.documentation.service.Response;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
@@ -83,6 +85,7 @@ public class SpringFoxConfig {
 					.globalResponses(HttpMethod.PUT, globalPutPostResponseMessages())
 					.globalResponses(HttpMethod.DELETE, globalDeleteResponseMessages())
 					.additionalModels(typeResolver.resolve(Problem.class))
+					.directModelSubstitute(Pageable.class, PageableModelOpenApi.class) //mudando Pageable para a classe criada para a documentação
 				.apiInfo(apiInfo())
 				.tags(new Tag("Cidades", "Gerencia as cidades"))
 				.tags(new Tag("Cozinhas", "Gerencia as cozinhas"))

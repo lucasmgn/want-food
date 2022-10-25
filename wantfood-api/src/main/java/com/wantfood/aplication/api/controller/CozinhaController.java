@@ -76,7 +76,7 @@ public class CozinhaController {
 	 * */
 	@ApiOperation("Lista as cozinhas")
 	@GetMapping
-	public Page<CozinhaDTO> listar(@PageableDefault(size = 3) Pageable pageable) {
+	public Page<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable) {
 		
 		Page<Cozinha> cozinhasPages = cozinhaRepository.findAll(pageable);
 		

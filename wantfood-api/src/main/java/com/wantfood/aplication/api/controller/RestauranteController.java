@@ -57,48 +57,52 @@ public class RestauranteController {
 	@JsonView(RestauranteView.ApenasNome.class)
 	@GetMapping(params = "projecao=apenas-nome")
 	public List<RestauranteDTO> listarNome(){
-		return restauranteDTOAssembler.toCollectionModel(restauranteRepository.findAll());
+		return listar();
 	}
 	
-//	@GetMapping
-//	public MappingJacksonValue listar(@RequestParam(required = false) String projecao) {
-//		List<Restaurante> restaurantes = restauranteRepository.findAll();
-//		List<RestauranteModel> restaurantesModel = restauranteModelAssembler.toCollectionModel(restaurantes);
-//		
-//		MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesModel);
-//		
-//		restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
-//		
-//		if ("apenas-nome".equals(projecao)) {
-//			restaurantesWrapper.setSerializationView(RestauranteView.ApenasNome.class);
-//		} else if ("completo".equals(projecao)) {
-//			restaurantesWrapper.setSerializationView(null);
-//		}
-//		
-//		return restaurantesWrapper;
-//	}
+/*
+	@GetMapping
+	public MappingJacksonValue listar(@RequestParam(required = false) String projecao) {
+		List<Restaurante> restaurantes = restauranteRepository.findAll();
+		List<RestauranteModel> restaurantesModel = restauranteModelAssembler.toCollectionModel(restaurantes);
+		
+		MappingJacksonValue restaurantesWrapper = new MappingJacksonValue(restaurantesModel);
+		
+		restaurantesWrapper.setSerializationView(RestauranteView.Resumo.class);
+		
+		if ("apenas-nome".equals(projecao)) {
+			restaurantesWrapper.setSerializationView(RestauranteView.ApenasNome.class);
+		} else if ("completo".equals(projecao)) {
+			restaurantesWrapper.setSerializationView(null);
+		}
+		
+		return restaurantesWrapper;
+	}
+
+*/
 	
+/*
+	Retorna um lista de restaurantes, se colocar os paremtros de resumo,
+	irá retornar apenas os restaurantes resumidos e se utilizar a projeção
+	de apenas nomes, será mostrado apenas os nomes
 	
-//	Retorna um lista de restaurantes, se colocar os paremtros de resumo,
-//	irá retornar apenas os restaurantes resumidos e se utilizar a projeção
-//	de apenas nomes, será mostrado apenas os nomes
+	@GetMapping
+	public List<RestauranteModel> listar() {
+			return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
+		}
 	
-//	@GetMapping
-//	public List<RestauranteModel> listar() {
-//			return restauranteModelAssembler.toCollectionModel(restauranteRepository.findAll());
-//		}
-//	
-//		@JsonView(RestauranteView.Resumo.class)
-//		@GetMapping(params = "projecao=resumo")
-//		public List<RestauranteModel> listarResumido() {
-//			return listar();
-//		}
-//
-//		@JsonView(RestauranteView.ApenasNome.class)
-//		@GetMapping(params = "projecao=apenas-nome")
-//		public List<RestauranteModel> listarApenasNomes() {
-//			return listar();
-//	}
+		@JsonView(RestauranteView.Resumo.class)
+		@GetMapping(params = "projecao=resumo")
+		public List<RestauranteModel> listarResumido() {
+			return listar();
+		}
+
+		@JsonView(RestauranteView.ApenasNome.class)
+		@GetMapping(params = "projecao=apenas-nome")
+		public List<RestauranteModel> listarApenasNomes() {
+			return listar();
+	}
+	*/
 	
 	@GetMapping("/{restauranteId}") 
 	public RestauranteDTO buscar(@PathVariable Long restauranteId){
