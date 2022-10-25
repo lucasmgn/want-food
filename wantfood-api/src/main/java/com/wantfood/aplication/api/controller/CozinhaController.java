@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,18 +25,18 @@ import com.wantfood.aplication.api.assembler.CozinhaDTOAssembler;
 import com.wantfood.aplication.api.assembler.CozinhaInputDisassembler;
 import com.wantfood.aplication.api.model.CozinhaDTO;
 import com.wantfood.aplication.api.model.input.CozinhaInputDTO;
+import com.wantfood.aplication.api.openapi.controller.CozinhaControllerOpenApi;
 import com.wantfood.aplication.domain.model.Cozinha;
 import com.wantfood.aplication.domain.repository.CozinhaRepository;
 import com.wantfood.aplication.domain.service.CadastroCozinhaService;
 
 import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
 
 @Api(tags = "Cozinhas")
 //Possui o @ResponsyBody e o @Controller
 @RestController
-@RequestMapping(value = "/cozinhas")
-public class CozinhaController {
+@RequestMapping(value = "/cozinhas", produces = MediaType.APPLICATION_JSON_VALUE)
+public class CozinhaController implements CozinhaControllerOpenApi{
 
 	@Autowired
 	private CozinhaRepository cozinhaRepository;
@@ -74,7 +75,6 @@ public class CozinhaController {
 	 *  key = sort e value = [nome da propriedade que será ordenada], por ex: id e nome
 	 *  para ordem descrecente, utiliza o ",desc" depois do nome da propriedade, ex: id,desc
 	 * */
-	@ApiOperation("Lista as cozinhas")
 	@GetMapping
 	public Page<CozinhaDTO> listar(@PageableDefault(size = 10) Pageable pageable) {
 		
@@ -91,7 +91,6 @@ public class CozinhaController {
 		return cozinhaDTOPage;
 	}
 
-	@ApiOperation("Busca uma cozinha por ID")
 	@GetMapping(value = "/{cozinhaId}")
 	public CozinhaDTO buscar(@PathVariable Long cozinhaId) {
 		Cozinha cozinha = cadastroCozinha.buscaOuFalha(cozinhaId);
@@ -99,7 +98,6 @@ public class CozinhaController {
 		return cozinhaDTOAssembler.toModel(cozinha);
 	}
 	
-	@ApiOperation("Cadastra uma cozinha")
 	// Colocando o status como create (status 201), e irá retornar a cozinha criada 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
@@ -111,7 +109,6 @@ public class CozinhaController {
 		return cozinhaDTOAssembler.toModel(cozinha);
 	}
 
-	@ApiOperation("Atualiza uma cozinha por ID")
 	@PutMapping("/{cozinhaId}")
 //	@ResponseStatus(HttpStatus.Up)
 	public CozinhaDTO atualizar(@PathVariable Long cozinhaId,
@@ -124,7 +121,6 @@ public class CozinhaController {
 		return cozinhaDTOAssembler.toModel(cozinhaAtual);
 	}
 	
-	@ApiOperation("Exclui uma cozinha por ID")
 	@DeleteMapping("/{cozinhaId}")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void remover(@PathVariable Long cozinhaId){

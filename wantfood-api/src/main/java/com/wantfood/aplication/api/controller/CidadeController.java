@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.wantfood.aplication.api.assembler.CidadeDTOAssembler;
 import com.wantfood.aplication.api.assembler.CidadeInputDisassembler;
-import com.wantfood.aplication.api.controller.openapi.CidadeControllerOpenApi;
 import com.wantfood.aplication.api.model.CidadeDTO;
 import com.wantfood.aplication.api.model.input.CidadeInputDTO;
+import com.wantfood.aplication.api.openapi.controller.CidadeControllerOpenApi;
 import com.wantfood.aplication.domain.exception.EstadoNaoEncontradoException;
 import com.wantfood.aplication.domain.exception.NegocioException;
 import com.wantfood.aplication.domain.model.Cidade;

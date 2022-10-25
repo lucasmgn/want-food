@@ -1,4 +1,4 @@
-package com.wantfood.aplication.api.controller.openapi;
+package com.wantfood.aplication.api.openapi.controller;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 
 /*
- * Interface criada para desiclopar as anotações do swagger no controlador de cidade
+ * Interface criada para desaclopar as anotações do swagger no controlador de cidade
  * 
  * @Api(tags = "Cidades") anotação para marcar o controlador como recuso do swagger
  * @ApiOperation("Lista as cidades") Mudando o nome do metodo na page do Swagger
@@ -35,16 +35,18 @@ public interface CidadeControllerOpenApi {
 	@ApiOperation("Lista as cidades")
 	public List<CidadeDTO> listar();
 	
+	
 	@ApiOperation("Busca uma cidade por ID")
 	@ApiResponses({	
 		@ApiResponse(responseCode = "400", description = "ID da cidade inválido",
 				content = @Content(mediaType = "application/json",
 				schema = @Schema(implementation = Problem.class))),
 		@ApiResponse(responseCode = "404", description = "Cidade não encontrada",
-		content = @Content(mediaType = "application/json",
-		schema = @Schema(implementation = Problem.class)))
+				content = @Content(mediaType = "application/json",
+				schema = @Schema(implementation = Problem.class)))
 	})
 	public CidadeDTO buscar(@ApiParam(value = "ID de uma cidade") Long cidadeId);
+	
 	
 	@ApiOperation("Cadastra uma cidade")
 	@ApiResponses({	
@@ -57,8 +59,8 @@ public interface CidadeControllerOpenApi {
 	@ApiResponses({	
 		@ApiResponse(responseCode = "200", description = "Cidade Atualizada"),
 		@ApiResponse(responseCode = "404", description = "Cidade não encontrada",
-		content = @Content(mediaType = "application/json",
-		schema = @Schema(implementation = Problem.class)))
+				content = @Content(mediaType = "application/json",
+				schema = @Schema(implementation = Problem.class)))
 	})
 	public CidadeDTO atualizar(@ApiParam(value = "ID de uma cidade") Long cidadeId,
 			CidadeInputDTO cidadeInputDTO);

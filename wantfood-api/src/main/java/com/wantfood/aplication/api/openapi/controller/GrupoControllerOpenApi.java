@@ -1,4 +1,4 @@
-package com.wantfood.aplication.api.controller.openapi;
+package com.wantfood.aplication.api.openapi.controller;
 
 import java.util.List;
 

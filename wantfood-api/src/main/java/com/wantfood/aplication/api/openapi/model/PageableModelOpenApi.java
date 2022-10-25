@@ -1,4 +1,4 @@
-package com.wantfood.aplication.core.openapi.model;
+package com.wantfood.aplication.api.openapi.model;
 
 import java.util.List;
 

@@ -16,7 +16,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import com.fasterxml.classmate.TypeResolver;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.wantfood.aplication.api.exceptionhandler.Problem;
-import com.wantfood.aplication.core.openapi.model.PageableModelOpenApi;
+import com.wantfood.aplication.api.openapi.model.PageableModelOpenApi;
 
 import springfox.documentation.service.Response;
 import springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration;
