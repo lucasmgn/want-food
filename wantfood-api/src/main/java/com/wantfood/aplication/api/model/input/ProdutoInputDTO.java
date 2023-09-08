@@ -14,15 +14,15 @@ import lombok.Setter;
 public class ProdutoInputDTO {
 	
 	@NotBlank
-	private String nome;
+	private String name;
 	
 	@NotBlank
-	private String descricao;	
+	private String description;	
 	
 	@NotNull
 	@PositiveOrZero
-	private BigDecimal preco;
+	private BigDecimal price;
 	
 	@NotNull
-	private Boolean ativo;
+	private Boolean active;
 }

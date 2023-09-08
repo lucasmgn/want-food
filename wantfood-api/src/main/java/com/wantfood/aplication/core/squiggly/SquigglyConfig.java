@@ -26,23 +26,23 @@ public class SquigglyConfig {
 	 *
 	 *Ajuda a fazer filtros das requisições
 	 *
-	 *Exemplo utilizando o endpoint da entidade pedido
+	 *Exemplo utilizando o endpoint da entidade order
 	 *
-	 *(key = fields value = codigo) = mostrará apenas a propriedade codigo
-	 *(key = fields value = codigo,valorTotal) = mostrará as propriedades codigo e valorTotal
+	 *(key = fields value = code) = mostrará apenas a propriedade code
+	 *(key = fields value = code,amount) = mostrará as propriedades code e amount
 	 *(key = fields value = sub*) = mostrará as propriedade que começam com "sub"
-	 *(key = fields value = cliente) = mostrará o objeto cliente com suas propriedades
-	 *(key = fields value = cliente.id) = mostra o objeto cliente e apenas a propriedade id
-	 *(key = fields value = codigo,valorTotal,sub*,cliente.id) = mostrando todos os atributos
+	 *(key = fields value = client) = mostrará o objeto client com suas propriedades
+	 *(key = fields value = client.id) = mostra o objeto client e apenas a propriedade id
+	 *(key = fields value = code,amount,sub*,client.id) = mostrando todos os atributos
 	 *
-	 *(key = fields value = cliente[id,nome]) = mostrando o atributo id e nome
-	 *(key = fields value = cliente[-id]) = mostrando todos os atributos, menos o id
-	 *(key = fields value = -codigo,-restaurante) = mostrando todos os atributos da entidade
-	 *menos o codigo e o objeto restaurante
+	 *(key = fields value = client[id,name]) = mostrando o atributo id e name
+	 *(key = fields value = client[-id]) = mostrando todos os atributos, menos o id
+	 *(key = fields value = -code,-restaurant) = mostrando todos os atributos da entidade
+	 *menos o code e o objeto restaurant
 	 *
 	 *OBS: lembrar que o Tomcat não aceita os "[]", alternativa para resolver o problema
 	 *é utilizando os enconding de "[]" que seriam o %5B para o "[" e %5D para o "]".
-	 *Podemos também adicionar os [] com um custumizador do Tomcat, Ele se chama Tomcatcustomizer
+	 *Podemos também add os [] com um custumizador do Tomcat, Ele se chama Tomcatcustomizer
 	 *o link https://gist.github.com/thiagofa/ce48c08e4caae34c5dca0a7a5c252666
 	 *
 	 *Se colocar no value um atributo que não existe, ele irá mostrá aqueles que existem
@@ -57,19 +57,19 @@ public class SquigglyConfig {
 	FilterRegistrationBean<SquigglyRequestFilter> squigglyRequestFilter(ObjectMapper objectMapper){
 		
 		/*
-		 * Iniciando o Squiggly, para mudar a chave de fields para um nome da minha escolha
-		 * eu posso adicionar nos parametros new RequestSquigglyContextProvider("campos", null),
-		 * mudando o nome de fields para campos
+		 * Iniciando o Squiggly, para mudar a chave de fields para um name da minha escolha
+		 * eu posso add nos parametros new RequestSquigglyContextProvider("campos", null),
+		 * mudando o name de fields para campos
 		 * */
 		Squiggly.init(objectMapper, new RequestSquigglyContextProvider());
 		
-		//Tudo o que começar com /pedidos ou /restaurantes, o Squiggly irá filtrar, os demais não
-		var urlPatterns = Arrays.asList("/pedidos/*", "/restaurantes/*");
+		//Tudo o que começar com /orders ou /restaurants, o Squiggly irá filtrar, os demais não
+		var urlPatterns = Arrays.asList("/orders/*", "/restaurants/*");
 		
 		var filterResgitration = new FilterRegistrationBean<SquigglyRequestFilter>();
 		filterResgitration.setFilter(new SquigglyRequestFilter());
 		
-		//Adicionando a restrição, funcionalidade ativa apenas para pedidos e restaurantes
+		//Adicionando a restrição, funcionalidade ativa apenas para orders e restaurants
 		filterResgitration.setUrlPatterns(urlPatterns);
 		
 		return filterResgitration;

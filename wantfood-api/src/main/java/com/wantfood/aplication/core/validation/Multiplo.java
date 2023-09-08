@@ -25,5 +25,5 @@ public @interface Multiplo {
 
 	Class<? extends Payload>[] payload() default { };
 
-	int numero();
+	int number();
 }

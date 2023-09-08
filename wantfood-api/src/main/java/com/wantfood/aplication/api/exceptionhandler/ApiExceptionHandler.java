@@ -29,9 +29,9 @@ import com.fasterxml.jackson.databind.JsonMappingException.Reference;
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.fasterxml.jackson.databind.exc.PropertyBindingException;
 import com.wantfood.aplication.core.validation.ValidacaoException;
-import com.wantfood.aplication.domain.exception.EntidadeEmUsoException;
-import com.wantfood.aplication.domain.exception.EntidadeNaoEncontradaException;
-import com.wantfood.aplication.domain.exception.NegocioException;
+import com.wantfood.aplication.domain.exception.EntityInUseException;
+import com.wantfood.aplication.domain.exception.EntityNotFoundException;
+import com.wantfood.aplication.domain.exception.BusinessException;
  
 /*
  * Classe global, para todos os controladores
@@ -85,7 +85,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 
 		    			/*
 		    			 * recebe o valor para passar na .userMessage,
-		    			 *  objetivo é ler o arquivo message.properties, o parametro mudou de fieldError para
+		    			 *  objetivo é ler o file message.properties, o parametro mudou de fieldError para
 		    			 *  objectError pq agora estou tratando de erros do objeto também
 		    			 * */
 		    			String message = messageSource.getMessage(objectError,
@@ -99,8 +99,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		    			}
 		    			
 		    			return Problem.Object.builder()
-		    				.name(name)//Pegando o nome da prorpiedade que foi violada
-		    				.userMessage(message)// .getDefaultMessage(), pegando a mensagem padrão
+		    				.name(name)//Pegando o name da prorpiedade que foi violada
+		    				.userMessage(message)// .getDefaultMessage(), pegando a Message padrão
 		    				.build();
 		    			})
 		    		.collect(Collectors.toList());
@@ -187,7 +187,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 			HttpHeaders headers, HttpStatus status, WebRequest request) {	
 		/*
 		 * Pegando a raiz do problema para ser passado como o erro pro usuário,
-		 * afim de especificar melhor a mensagem de erro 
+		 * afim de especificar melhor a Message de erro 
 		 * Pegando a causa raiz
 		 * */
 		Throwable rootCause = ExceptionUtils.getRootCause(e);
@@ -203,8 +203,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 			return handlePropertyBinding((PropertyBindingException) rootCause, headers, status, request);
 		}
 		
-		ProblemType problemType = ProblemType.ERRO_NA_MENSAGEM;
-		String detail = "O corpo está requisição está inválido. Possivel erro na sintaxe.";
+		ProblemType problemType = ProblemType.ERRO_NA_Message;
+		String detail = "O body está requisição está inválido. Possivel erro na sintaxe.";
 		
 		Problem problem = createProblemBuilder(status, problemType, detail).build();
 		
@@ -219,11 +219,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		/*
 		 * IgnoredPropertyException e UnrecongnizePropertyException que extends PropertyBindingException
 		 * Criando variável que irá pegar o Path da exception
-		 * e irá formatar o nome dela, delimitando por um '.'
+		 * e irá formatar o name dela, delimitando por um '.'
 		 * */
 		String path = joinPath(e.getPath());
 		
-		ProblemType problemType = ProblemType.ERRO_NA_MENSAGEM;
+		ProblemType problemType = ProblemType.ERRO_NA_Message;
 		String detail = String.format("A propriedade '%s' não existe. "
 				+ "Corrija ou remova essa propriedade e tente novamente.", path);
 		
@@ -243,11 +243,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		/*
 		 * InvalidFormatException
 		 * Criando variável que irá pegar o Path da exception
-		 * e irá formatar o nome dela, delimitando por um '.'
+		 * e irá formatar o name dela, delimitando por um '.'
 		 * */
 		 String path = joinPath(e.getPath());
 		
-		ProblemType problemType = ProblemType.ERRO_NA_MENSAGEM;
+		ProblemType problemType = ProblemType.ERRO_NA_Message;
 		String detail = String.format("A propriedade '%s' recebeu o valor '%s',"
 				+ " que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
 				path, e.getValue(), e.getTargetType().getSimpleName());
@@ -261,11 +261,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 
 	/*
 	 * Criando metodo para controlar os consoles de erro
-	 * @ExceptionHandler Aceita mais de um argumento, pode ser usado {EstadoNaoEncontradoException.class},
-	 * {EstadoeXEMPLOException.class}
+	 * @ExceptionHandler Aceita mais de um argumento, pode ser usado {StateNotFoundException.class},
+	 * {stateeXEMPLOException.class}
 	 * */
-	@ExceptionHandler(EntidadeNaoEncontradaException.class)
-	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntidadeNaoEncontradaException e,
+	@ExceptionHandler(EntityNotFoundException.class)
+	public ResponseEntity<?> handleEntidadeNaoEncontrada(EntityNotFoundException e,
 			WebRequest request){
 		
 		HttpStatus status = HttpStatus.NOT_FOUND;
@@ -277,8 +277,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 	
-	@ExceptionHandler(NegocioException.class)
-	public ResponseEntity<?> handleNegocio(NegocioException e, WebRequest request){
+	@ExceptionHandler(BusinessException.class)
+	public ResponseEntity<?> handleNegocio(BusinessException e, WebRequest request){
 		
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		ProblemType problemType = ProblemType.ERRO_NEGOCIO;
@@ -289,8 +289,8 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		return handleExceptionInternal(e, problem, new HttpHeaders(), status, request);
 	}
 	
-	@ExceptionHandler(EntidadeEmUsoException.class)
-	public ResponseEntity<?> handleEntidadeEmUso(EntidadeEmUsoException e, WebRequest request){
+	@ExceptionHandler(EntityInUseException.class)
+	public ResponseEntity<?> handleEntidadeEmUso(EntityInUseException e, WebRequest request){
 
 		HttpStatus status = HttpStatus.CONFLICT;
 		ProblemType problemType = ProblemType.ENTIDADE_EM_USO;
@@ -307,15 +307,15 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	protected ResponseEntity<Object> handleExceptionInternal(Exception e, Object body,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {	
 		/*
-		 * Se o corpo for nulo será aplicado as mensagens padrão do spring,
-		 * caso não seja a mensagem criada de exception será apresentada
+		 * Se o body for nulo será aplicado as mensagens padrão do spring,
+		 * caso não seja a Message criada de exception será apresentada
 		 */ 
 		if(body == null) {
 			body = Problem.builder()
 					.timestamp(OffsetDateTime.now())
 					.title(status.getReasonPhrase()) //descreve o status que retorna na repsosta
 					.status(status.value())
-					.userMessage(USER_MESSAGE) //Mensagem para o usuário
+					.userMessage(USER_MESSAGE) //Message para o usuário
 					.build();
 		}else if(body instanceof String) {
 			body = Problem.builder()
@@ -329,7 +329,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 		return super.handleExceptionInternal(e, body, headers, status, request);
 	}
 	
-	//Metodo para ser utilizado para criar um build de problem, facilitando a manutenção
+	//Metodo para ser utilizado para create um build de problem, facilitando a manutenção
 	private Problem.ProblemBuilder createProblemBuilder(HttpStatus status,
 			ProblemType problemType, String detail){
 		
@@ -343,7 +343,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler{
 	}
 
 	
-	//Método joinPath irá concatenar os nomes das propriedades, separando-as por "." 
+	//Método joinPath irá concatenar os names das propriedades, separando-as por "." 
 	private String joinPath(List<Reference> references) {
 	    return references.stream()
 	        .map(ref -> ref.getFieldName())

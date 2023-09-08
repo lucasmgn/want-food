@@ -1,0 +1,96 @@
+spring:
+  datasource:
+    url: "jdbc:mysql://localhost/wantfood?createDatabaseIfNotExist=true&severTimezone=UTC"
+    username: "root"
+    password: "root"
+ 
+#Colocando localizacao dos scripts para o flyway
+  flyway:
+    locations: "classpath:db/migration,classpath:db/testdata"
+ 
+#Para mostrar o sql no console
+  jpa:
+    show-sql: "true"
+ 
+#Dialeto
+    properties:
+      hibernate:
+        dialect: "org.hibernate.dialect.MySQL57Dialect"
+
+#Utilizado para identificar propriedades que nao existem e sinalizar um erro
+  jackson:
+    deserialization:
+      fail-on-unknown-properties: "true"
+
+#Utilizado para mostrar uma falha se uma propriedade estiver sento ignorando @JSonIgnore
+      fail-on-ignored-properties: "true"
+
+#Se nao tiver um code mapeavel para a url, lanÃ§a uma exception
+  mvc:
+    throw-exception-if-no-handler-found: "true"
+
+#Desabilitando o resource handler do spring, files estaticos como photos
+  web:
+    resources:
+      add-mappings: "false"
+
+#Configuracoes do SendGrid, no spring.mail.username= sempre sera apiKey
+  mail:
+    host: "smtp.sendgrid.net"
+    port: "587"
+    username: "apikey"
+
+#Freemarker
+  freemarker:
+    settings:
+      locale: "pt_BR"
+
+#diretorio de armazenametos de photos local
+wantfood:
+    storage:
+      local.diretorio-photos: "/Users/lucas/photos-wantfood"
+
+#diretorio de armazenamento da amazon s3
+#wantfood.storage.s3.id-chave-acesso= dashboard config
+#wantfood.storage.s3.chave-acesso-secreta=
+    s3:
+      bucket: "wantfood-test"
+      regiao: "us-east-1"
+      diretorio-photos: "catalogo"
+
+#Mostra qual o tipo de armazenamento que eu desejo usar, s3 ou local
+    tipo: "local"
+
+#Propriedade usada em core/email/EmailProperties
+    email:
+      remetente: "WantFood <lucasmagno695@gmail.com>"
+
+#Usado em desenvolvimento fake, usado em producao Smtp, para enviar email em desenvolvimento sandbox
+    impl: "fake"
+
+    sandbox:
+      destinatario: "lucasmagno695@gmail.com"
+#Alterando o max padrÃ£o do MultipartFile
+#spring.servlet.multipart.max-file-size=3KB
+#spring.servlet.multipart.max-request-size=20MB
+
+ #Gerar o script de ctiacao de tabela
+#spring.jpa.generate-ddl=true 
+
+ #Forma de como quer ser executado, "create" dropa e cria as tabelas
+#spring.jpa.hibernate.ddl-auto=create
+
+#Gerando apenas os schemas
+#spring.jpa.properties.javax.persistence.schema-generation.scripts.action=create
+
+#Criando o file onde ficara os scripts de ddl
+#spring.jpa.properties.javax.persistence.schema-generation.scripts.create-target=src/main/resources/ddl.sql
+
+#Configurando o hikari para te no maximo de conexao 5 e no minimo 3, o padrao ï¿½ 10
+#spring.datasource.hikari.maximum-pool-size=5
+#spring.datasource.hikari.minimum-idle=3
+
+#Colocando o tempo limite para os pools ociosos serem excluidos, em milissegundos o minimo sï¿½o 10000(10 s)
+#spring.datasource.hikari.idle-timeout=10000
+
+#server.error.include-stacktrace=never

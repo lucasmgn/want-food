@@ -21,7 +21,7 @@ public class WebConfig implements WebMvcConfigurer{
 //		.maxAge(5);
 	}
 
-    //Irá adicionar o Etag no Response Headers do navegador
+    //Irá add o Etag no Response Headers do navegador
     @Bean
     Filter shallowEtagHeaderFilter() {
         return new ShallowEtagHeaderFilter();

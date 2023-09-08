@@ -58,14 +58,14 @@ public class SpringFoxConfig {
 	 * .apis(RequestHandlerSelectors.basePackage("com.wantfood.aplication.api")), escaneando os
 	 * controladores apenas desse pacote selecionado
 	 * 
-	 * .tags, configurando as tags, adicionando no controlador de cidade a anotação @Api(tags = "Cidades"),
+	 * .tags, configurando as tags, adicionando no controlador de city a anotação @Api(tags = "Citys"),
 	 * para fazer a referencia
 	 * 
 	 * .useDefaultResponseMessages(false), desabilitando os cod de error padrão e implementando o meu.
 	 * 
-	 * .globalResponses, descreve os codigos de retorno padrão para metodo escolhido(GET)
+	 * .globalResponses, descreve os codes de retorno padrão para metodo escolhido(GET)
 	 * 
-	 * additionalModels(tupeResolver.resolve(Problem.class)), adicionando um novo modelo 
+	 * additionalModels(tupeResolver.resolve(Problem.class)), adicionando um new modelo 
 	 * para o springfox escanear, já que ele escaneia apenas controladores e o Problem não
 	 *  está em nenhuma classe de controlador
 	 * */
@@ -87,12 +87,12 @@ public class SpringFoxConfig {
 					.additionalModels(typeResolver.resolve(Problem.class))
 					.directModelSubstitute(Pageable.class, PageableModelOpenApi.class) //mudando Pageable para a classe criada para a documentação
 				.apiInfo(apiInfo())
-				.tags(new Tag("Cidades", "Gerencia as cidades"))
-				.tags(new Tag("Cozinhas", "Gerencia as cozinhas"))
-				.tags(new Tag("Grupos", "Gerencia grupos de usuários"));
+				.tags(new Tag("Citys", "Gerencia as citys"))
+				.tags(new Tag("Kitchens", "Gerencia as kitchens"))
+				.tags(new Tag("Groups", "Gerencia groups de usuários"));
 	}
 	
-	//Implementando os codigos de error de todo os métodos GET da aplicação
+	//Implementando os codes de error de todo os métodos GET da aplicação
 	private List<Response> globalGetResponseMessages(){
 		return Arrays.asList(
 				internalServerError(),
@@ -100,7 +100,7 @@ public class SpringFoxConfig {
 		);
 	}
 	
-	//Implementando os codigos de error de todo os métodos Delete da aplicação
+	//Implementando os codes de error de todo os métodos Delete da aplicação
 	private List<Response> globalDeleteResponseMessages(){
 		return Arrays.asList(
 				badRequest(),
@@ -108,7 +108,7 @@ public class SpringFoxConfig {
 		);
 	}
 	
-	//Implementando os codigos de error de todo os métodos PUT e POST da aplicação
+	//Implementando os codes de error de todo os métodos PUT e POST da aplicação
 	private List<Response> globalPutPostResponseMessages(){
 		return Arrays.asList(
 				badRequest(),
@@ -122,7 +122,7 @@ public class SpringFoxConfig {
 	private Response badRequest() {
 		return new ResponseBuilder()
 		.code(String.valueOf(HttpStatus.BAD_REQUEST.value()))
-		.description("Requisição inválida (erro do cliente)")
+		.description("Requisição inválida (erro do client)")
 		.representation(MediaType.APPLICATION_JSON)
 		.apply(getProblemReferencia())
 		.build();
@@ -150,7 +150,7 @@ public class SpringFoxConfig {
 	private Response unsupportedMediaType() {
 		return new ResponseBuilder()
 		.code(String.valueOf(HttpStatus.UNSUPPORTED_MEDIA_TYPE.value()))
-		.description("Requisição recusada porque o corpo está em um formato não suportado")
+		.description("Requisição recusada porque o body está em um formato não suportado")
 		.representation(MediaType.APPLICATION_JSON)
 		.apply(getProblemReferencia())
 		.build();
@@ -164,13 +164,13 @@ public class SpringFoxConfig {
 	}
 	
 	/*
-	 * Modificando page do Swagger UI, alterando titulo, descrição e versão e contato com nome da empresa,
+	 * Modificando page do Swagger UI, alterando titulo, descrição e versão e contato com name da empresa,
 	 * site e e-mail
 	 * */
 	private ApiInfo apiInfo() {
 		return new ApiInfoBuilder()
 				.title("WantFood API")
-				.description("API aberta para Clientes e Restaurantes")
+				.description("API aberta para clients e restaurants")
 				.version("1")
 				.contact(new Contact(
 						"Wantfood-Company",

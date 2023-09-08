@@ -11,14 +11,14 @@ import org.springframework.beans.BeanUtils;
 public class FreteGratisValidator implements ConstraintValidator<ValorZeroFreteGratuito, Object>{
 	
 	private String valorField;
-	private String descricaoField;
-	private String descricaoObrigatoria;
+	private String descriptionField;
+	private String descriptionObrigatoria;
 	
 	@Override
 	public void initialize(ValorZeroFreteGratuito constraintAnnotation) {
 		this.valorField = constraintAnnotation.valorField();
-		this.descricaoField = constraintAnnotation.descricaoField();
-		this.descricaoObrigatoria = constraintAnnotation.descricaoObrigatoria();
+		this.descriptionField = constraintAnnotation.descriptionField();
+		this.descriptionObrigatoria = constraintAnnotation.descriptionObrigatoria();
 	}
 	
 	@Override
@@ -31,13 +31,13 @@ public class FreteGratisValidator implements ConstraintValidator<ValorZeroFreteG
 			BigDecimal valor = (BigDecimal) BeanUtils.getPropertyDescriptor(objetoValidacao.getClass(), valorField)
 					.getReadMethod().invoke(objetoValidacao);
 			
-			String descricao = (String) BeanUtils.getPropertyDescriptor(objetoValidacao.getClass(), descricaoField)
+			String description = (String) BeanUtils.getPropertyDescriptor(objetoValidacao.getClass(), descriptionField)
 					.getReadMethod().invoke(objetoValidacao);
 			
 			//Fazendo a verificação
-			if(valor != null && BigDecimal.ZERO.compareTo(valor) == 0 && descricao != null) {
-				//Verificando se o nome tem "Frete Grátis", por ex: Points Burger - Frete Grátis
-				valido = descricao.toLowerCase().contains(this.descricaoObrigatoria.toLowerCase());
+			if(valor != null && BigDecimal.ZERO.compareTo(valor) == 0 && description != null) {
+				//Verificando se o name tem "Frete Grátis", por ex: Points Burger - Frete Grátis
+				valido = description.toLowerCase().contains(this.descriptionObrigatoria.toLowerCase());
 			}
 			
 			return valido;

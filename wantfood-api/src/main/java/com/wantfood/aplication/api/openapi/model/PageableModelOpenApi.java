@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 /*
- * classe criada para substituir o Pageable da Cozinha controller, feita para usu de documentação,
+ * classe criada para replace o Pageable da Kitchen controller, feita para usu de documentação,
  * alterei a classe SpringFoxConfig para trocar as classes, Pageable para essa classe
  * 
  * */
@@ -23,7 +23,7 @@ public class PageableModelOpenApi {
 	@ApiModelProperty(example = "10", value = "Quantidade de elementos por página")
 	private int size;
 	
-	@ApiModelProperty(example = "nome,asc", value = "Nome da propriedade em ordem")
+	@ApiModelProperty(example = "name,asc", value = "name da propriedade em ordem")
 	private List<String> sort;
 
 }
