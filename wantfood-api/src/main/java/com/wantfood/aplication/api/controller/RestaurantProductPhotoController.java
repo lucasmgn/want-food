@@ -33,13 +33,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class RestaurantProductPhotoController {
 	
-	private final CatalogPhotoProductService photoProdutoService;
+	private final CatalogPhotoProductService photoProductService;
 	
 	private final ProductRegistrationService productService;
 	
 	private final PhotoProductDTOAssembler assembler;
-	
-	private final CatalogPhotoProductService photoProductService;
 	
 	private final PhotoStorageService photoStorageService;
 	
@@ -48,9 +46,9 @@ public class RestaurantProductPhotoController {
 	public PhotoProductDTO find(@PathVariable Long restaurantId,
 			@PathVariable Long productId){
 			
-		var photoProduto = photoProductService.fetchOrFail(restaurantId, productId);
+		var photoProduct = photoProductService.fetchOrFail(restaurantId, productId);
 		
-		return assembler.toModel(photoProduto);
+		return assembler.toModel(photoProduct);
 		
 	}
 	
@@ -60,15 +58,15 @@ public class RestaurantProductPhotoController {
 			@PathVariable Long productId, @RequestHeader(name = "accept") String acceptHeader){
 
 		try {
-			var photoProduto = photoProductService.fetchOrFail(restaurantId, productId);
+			var photoProduct = photoProductService.fetchOrFail(restaurantId, productId);
 			
 			//Verificando compatibilidade, parseMediaType converte uma string em media type
-			var mediaType = MediaType.parseMediaType(photoProduto.getContentType());
+			var mediaType = MediaType.parseMediaType(photoProduct.getContentType());
 			var mediaTypesAceitas = MediaType.parseMediaTypes(acceptHeader);
 			
 			checkMediaType(mediaType, mediaTypesAceitas);
 			
-			var photoRecuperada = photoStorageService.recover(photoProduto.getNameFile());
+			var photoRecuperada = photoStorageService.recover(photoProduct.getNameFile());
 			
 			if (photoRecuperada.temUrl()) {
 				//Retornando a url
@@ -87,20 +85,20 @@ public class RestaurantProductPhotoController {
 	
 	@PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public PhotoProductDTO updatePhoto(@PathVariable Long restaurantId,
-			@PathVariable Long productId, @Valid PhotoProductInput photoProdutoInput) throws IOException {
+			@PathVariable Long productId, @Valid PhotoProductInput photoProductInput) throws IOException {
 		
 		var product = productService.fetchOrFail(restaurantId, productId);
 		
-		var file = photoProdutoInput.getFile();
+		var file = photoProductInput.getFile();
 		
-		var photoProduto = new PhotoProduct();
-		photoProduto.setProduct(product);
-		photoProduto.setDescription(photoProdutoInput.getDescription());
-		photoProduto.setContentType(file.getContentType());
-		photoProduto.setSize(file.getSize());
-		photoProduto.setNameFile(file.getOriginalFilename());
+		var photoProduct = new PhotoProduct();
+		photoProduct.setProduct(product);
+		photoProduct.setDescription(photoProductInput.getDescription());
+		photoProduct.setContentType(file.getContentType());
+		photoProduct.setSize(file.getSize());
+		photoProduct.setNameFile(file.getOriginalFilename());
 		
-		var photo = photoProdutoService.save(photoProduto, file.getInputStream());
+		var photo = photoProductService.save(photoProduct, file.getInputStream());
 		return assembler.toModel(photo);
 	}
 	

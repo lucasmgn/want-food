@@ -8,10 +8,10 @@ import com.wantfood.aplication.infrastructure.repository.CustomJpaRepositoryImpl
 
 @SpringBootApplication
 @EnableJpaRepositories(repositoryBaseClass = CustomJpaRepositoryImpl.class)
-public class WantfoodApiApplication {
+public class WantFoodApiApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(WantfoodApiApplication.class, args); 
+		SpringApplication.run(WantFoodApiApplication.class, args);
 	}
 
 }

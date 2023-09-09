@@ -8,9 +8,9 @@ import java.time.OffsetDateTime;
 
 public interface FormPaymentRepository extends JpaRepository<FormPayment, Long>{
 	
-	@Query("select max(dateUpdate) from formPayment")
-	OffsetDateTime getDataUltimaAtualizacao();
+	@Query("select max(dateUpdate) from FormPayment")
+	OffsetDateTime getDateUpdate();
 	
-	@Query("select dateUpdate from formPayment where id = :formPaymentId")
-	OffsetDateTime getDataUltimaAtualizacaoById(Long formPaymentId);
+	@Query("select dateUpdate from FormPayment where id = :formPaymentId")
+	OffsetDateTime getDataUpdateById(Long formPaymentId);
 }	

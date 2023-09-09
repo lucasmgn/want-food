@@ -117,7 +117,7 @@
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk-s3</artifactId>
-            <version>1.11.671</version>
+            <version>1.12.13</version>
         </dependency>
 
         <!-- Dependencia para envio de emails -->
@@ -153,7 +153,7 @@
             <version>3.0.0</version>
         </dependency>
 
-        <!-- Corrigindo erro do OffsetDateTime quando tentamos gerar um documento no swaggerUI-->
+<!--         Corrigindo erro do OffsetDateTime quando tentamos gerar um documento no swaggerUI-->
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-jsr310</artifactId>

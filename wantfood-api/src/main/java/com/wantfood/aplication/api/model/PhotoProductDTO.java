@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 public class PhotoProductDTO {
 	
-//	private ProdutoDTO product;
+//	private ProductDTO product;
 	private String description;
 	private String contentType;
 	private String nameFile;

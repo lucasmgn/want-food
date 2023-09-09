@@ -1,9 +1,9 @@
 package com.wantfood.aplication.api.controller;
 
-import com.wantfood.aplication.api.assembler.ProdutoDTOAssembler;
-import com.wantfood.aplication.api.assembler.ProdutoInputDisassembler;
+import com.wantfood.aplication.api.assembler.ProductDTOAssembler;
+import com.wantfood.aplication.api.assembler.ProductInputDisassembler;
 import com.wantfood.aplication.api.model.ProductDTO;
-import com.wantfood.aplication.api.model.input.ProdutoInputDTO;
+import com.wantfood.aplication.api.model.input.ProductInputDTO;
 import com.wantfood.aplication.domain.model.Product;
 import com.wantfood.aplication.domain.repository.ProductRepository;
 import com.wantfood.aplication.domain.service.ProductRegistrationService;
@@ -34,9 +34,9 @@ public class RestaurantProductController {
     
     private final RegistrationRestaurantService registrationRestaurantService;
     
-    private final ProdutoDTOAssembler productModelAssembler;
+    private final ProductDTOAssembler productModelAssembler;
     
-    private final ProdutoInputDisassembler productInputDisassembler;
+    private final ProductInputDisassembler productInputDisassembler;
 	
     /*
      * @RequestParam (required = false) boolean incluiinactives
@@ -74,7 +74,7 @@ public class RestaurantProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDTO add(@PathVariable Long restaurantId,
-            @RequestBody @Valid ProdutoInputDTO productInput) {
+            @RequestBody @Valid ProductInputDTO productInput) {
 
         var restaurant = registrationRestaurantService.fetchOrFail(restaurantId);
         
@@ -88,7 +88,7 @@ public class RestaurantProductController {
 	
     @PutMapping("/{productId}")
     public ProductDTO atualizar(@PathVariable Long restaurantId, @PathVariable Long productId,
-            @RequestBody @Valid ProdutoInputDTO productInput) {
+            @RequestBody @Valid ProductInputDTO productInput) {
 
         var productAtual = productRegistrationService.fetchOrFail(restaurantId, productId);
         

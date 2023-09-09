@@ -14,7 +14,7 @@ import java.util.Optional;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, ProductRepositoryQueries{
 	
-    @Query("from Produto where restaurant.id = :restaurant and id = :product")
+    @Query("from Product where restaurant.id = :restaurant and id = :product")
     Optional<Product> findById(@Param("restaurant") Long restaurantId,
                                @Param("product") Long productId);
     
@@ -22,10 +22,10 @@ public interface ProductRepository extends JpaRepository<Product, Long>, Product
     List<Product> findByRestaurant(Restaurant restaurant);
     
     //Buscando todos os restaurant que tem a propriedade active como true
-    @Query("from Produto p where p.active = true and restaurant = :restaurant")
+    @Query("from Product p where p.active = true and restaurant = :restaurant")
     List<Product> findActiveByRestaurant(Restaurant restaurant);
 
-    //retornando photoProduto
+    //retornando photoProduct
     @Query("select f from PhotoProduct f join f.product p "
     		+ "where p.restaurant.id = :restaurantId and f.product.id = :productId")
     Optional<PhotoProduct> findPhotoProductById(Long restaurantId, Long productId);

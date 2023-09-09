@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/estatisticas")
+@RequestMapping(value = "/statistics")
 @RequiredArgsConstructor
 public class StatisticController {
 	
@@ -25,14 +25,14 @@ public class StatisticController {
 	private final SellReportService reportService;
 	
 	//Se o consumidor não especificar nada no param, utilizará o UTC
-	@GetMapping(value = "/vendas-diarias")
+	@GetMapping(value = "/daily-sales\"")
 	public List<SaleDaily> consultDailySales(SaleDailyFilter filter,
 			@RequestParam(required = false, defaultValue = "+00:00") String timeOffset){
 		return service.consultDailySales(filter, timeOffset);
 	}
 	
 	//gerando relatorio
-	@GetMapping(value = "/vendas-diarias")
+	@GetMapping(value = "/daily-sales", produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<byte[]> consultDailySalesPdf(SaleDailyFilter filter,
 			@RequestParam(required = false, defaultValue = "+00:00") String timeOffset){
 		

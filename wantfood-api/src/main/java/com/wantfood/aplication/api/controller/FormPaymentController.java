@@ -79,7 +79,7 @@ public class FormPaymentController {
 		//Se retornar nulo, a eTag será igual a 0
 		var eTag = "0";
 			
-		var dataUltimaAtualizacao = formPaymentRepository.getDataUltimaAtualizacao();
+		var dataUltimaAtualizacao = formPaymentRepository.getDateUpdate();
 		
 		if(dataUltimaAtualizacao != null) {
 			//Retorna o number de segundos desde 1970, transformando em String
@@ -114,7 +114,7 @@ public class FormPaymentController {
 		var eTag = "0";
 		
 		var dateUpdate = formPaymentRepository
-	            .getDataUltimaAtualizacaoById(formPaymentId);
+	            .getDataUpdateById(formPaymentId);
 		
 		if(dateUpdate != null) {
 			eTag = String.valueOf(dateUpdate.toEpochSecond()); 

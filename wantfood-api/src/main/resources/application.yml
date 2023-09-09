@@ -17,7 +17,7 @@ spring:
       hibernate:
         dialect: "org.hibernate.dialect.MySQL57Dialect"
 
-#Utilizado para identificar propriedades que nao existem e sinalizar um erro
+  #Utilizado para identificar propriedades que nao existem e sinalizar um erro
   jackson:
     deserialization:
       fail-on-unknown-properties: "true"

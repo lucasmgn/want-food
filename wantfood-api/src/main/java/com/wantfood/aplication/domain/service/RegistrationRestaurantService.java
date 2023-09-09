@@ -54,7 +54,7 @@ public class RegistrationRestaurantService {
 
 	
 	@Transactional //para colocar todas as operações de transação em massa, não ter nenhuma inconsistência
-	public void activeTodosrestaurants(List<Long> restaurantIds) {
+	public void activeAllRestaurants(List<Long> restaurantIds) {
 		//chamando o metodo active para a lista restaurantsIds
 	    restaurantIds.forEach(this::active);
 	}

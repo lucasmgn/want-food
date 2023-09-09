@@ -1,4 +1,4 @@
-create table payment_form (
+create table form_payment (
 	id bigint not null auto_increment,
 	description varchar(60) not null,
 	primary key (id)
@@ -82,7 +82,7 @@ alter table restaurant add constraint FK76grk4roudh659skcgbnanthi foreign key (k
 
 alter table restaurant add constraint FKbc0tm7hnvc96d8e7e2ulb05yw foreign key (address_city_id) references city (id);
 
-alter table restaurant_form_payment add constraint FK7aln770m80358y4olr03hyhh2 foreign key (form_payment_id) references payment_form (id);
+alter table restaurant_form_payment add constraint FK7aln770m80358y4olr03hyhh2 foreign key (form_payment_id) references form_payment (id);
 
 alter table restaurant_form_payment add constraint FKa30vowfejemkw7whjvr8pryvj foreign key (restaurant_id) references restaurant (id);
 

@@ -14,7 +14,7 @@ import java.io.InputStream;
 @RequiredArgsConstructor
 public class CatalogPhotoProductService {
 	
-	//Utilizando o repositorio de product pq PhotoProduct está dentro do agregado de Produto
+	//Utilizando o repositorio de product pq PhotoProduct está dentro do agregado de Product
 	private final ProductRepository productRepository;
 	
 	private final PhotoStorageService storageService;

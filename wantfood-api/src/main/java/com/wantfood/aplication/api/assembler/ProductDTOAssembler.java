@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import com.wantfood.aplication.api.model.ProductDTO;
 
 @Component
-public class ProdutoDTOAssembler {
+public class ProductDTOAssembler {
 	
 	@Autowired
 	ModelMapper modelMapper;
