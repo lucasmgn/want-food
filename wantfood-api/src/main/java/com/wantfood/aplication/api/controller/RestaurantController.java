@@ -7,7 +7,6 @@ import com.wantfood.aplication.api.model.view.RestaurantView;
 import com.wantfood.aplication.domain.service.RestauranteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -27,9 +27,8 @@ public class RestaurantController {
 
     private final RestauranteService restauranteService;
 
-    //Listando restaurant de forma resumida devido ao @JsonView(RestaurantView.Resume.class)
-    @GetMapping //(produces = MediaType.APPLICATION_JSON_VALUE)
     @JsonView(RestaurantView.Resume.class)
+    @GetMapping
     public ResponseEntity<List<RestaurantDTO>> listAll() {
         return ResponseEntity.ok(restauranteService.findAll());
     }
@@ -39,47 +38,6 @@ public class RestaurantController {
     public ResponseEntity<List<RestaurantDTO>> listName() {
         return listAll();
     }
-	
-/*
-	@GetMapping
-	public MappingJacksonValue list(@RequestParam(required = false) String projecao) {
-		List<restaurant> restaurants = restaurantRepository.findAll();
-		List<restaurantModel> restaurantsModel = restaurantModelAssembler.toCollectionModel(restaurants);
-		
-		MappingJacksonValue restaurantsWrapper = new MappingJacksonValue(restaurantsModel);
-		
-		restaurantsWrapper.setSerializationView(RestaurantView.Resume.class);
-		
-		if ("apenas-name".equals(projecao)) {
-			restaurantsWrapper.setSerializationView(RestaurantView.JustName.class);
-		} else if ("completo".equals(projecao)) {
-			restaurantsWrapper.setSerializationView(null);
-		}
-		
-		return restaurantsWrapper;
-	}
-
-	Retorna um lista de restaurants, se colocar os paremtros de resumo,
-	irá retornar apenas os restaurants resumidos e se utilizar a projeção
-	de apenas names, será mostrado apenas os names
-	
-	@GetMapping
-	public List<restaurantModel> list() {
-			return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
-		}
-	
-		@JsonView(RestaurantView.Resume.class)
-		@GetMapping(params = "projecao=resumo")
-		public List<restaurantModel> listResumido() {
-			return list();
-		}
-
-		@JsonView(RestaurantView.JustName.class)
-		@GetMapping(params = "projecao=apenas-name")
-		public List<restaurantModel> listJustNames() {
-			return list();
-	}
-	*/
 
     @GetMapping("/{restaurantId}")
     public ResponseEntity<RestaurantDTO> find(@PathVariable Long restaurantId) {
@@ -93,13 +51,13 @@ public class RestaurantController {
      * fazendo a validação usando o group registrationRestaurantServices @Validated(Groups.Cadastrorestaurant.class)
      * */
     @PostMapping
-    public ResponseEntity<RestaurantDTO> add(@RequestBody RestaurantInputDTO restaurantInputDTO) {
+    public ResponseEntity<RestaurantDTO> add(@RequestBody @Valid RestaurantInputDTO restaurantInputDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(restauranteService.create(restaurantInputDTO));
     }
 
     @PutMapping("/{restaurantId}")
     public ResponseEntity<RestaurantDTO> update(@PathVariable Long restaurantId,
-            @RequestBody RestaurantInputDTO restaurantInputDTO) {
+            @RequestBody @Valid RestaurantInputDTO restaurantInputDTO) {
         return ResponseEntity.ok(restauranteService.update(restaurantId, restaurantInputDTO));
     }
 

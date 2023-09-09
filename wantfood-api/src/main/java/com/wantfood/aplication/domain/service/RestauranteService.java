@@ -2,9 +2,7 @@ package com.wantfood.aplication.domain.service;
 
 import com.wantfood.aplication.api.model.RestaurantDTO;
 import com.wantfood.aplication.api.model.input.RestaurantInputDTO;
-import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.validation.Valid;
 import java.util.List;
 
 public interface RestauranteService {
@@ -13,9 +11,9 @@ public interface RestauranteService {
 
     RestaurantDTO findBy(Long restaurantId);
 
-    RestaurantDTO create(@Valid RestaurantInputDTO restaurantInputDTO);
+    RestaurantDTO create(RestaurantInputDTO restaurantInputDTO);
 
-    RestaurantDTO update(Long restaurantId, @Valid RestaurantInputDTO restaurantInputDTO);
+    RestaurantDTO update(Long restaurantId, RestaurantInputDTO restaurantInputDTO);
 
     void active(Long restaurantId);
 

@@ -32,14 +32,14 @@ public interface KitchenControllerOpenApi {
 				content = @Content(mediaType = "application/json",
 				schema = @Schema(implementation = Problem.class)))
 	})
-	public KitchenDTO find(@ApiParam(value = "ID de uma kitchen", example = "1") Long kitchenId);
+	KitchenDTO find(@ApiParam(value = "ID de uma kitchen", example = "1") Long kitchenId);
 	
 	
 	@ApiOperation("Cadastra uma kitchen")
 	@ApiResponses({	
 		@ApiResponse(responseCode = "201", description = "Kitchen Cadastrada")
 	})
-	public KitchenDTO add(@ApiParam(name = "body", value = "Representação de uma nova kitchen")
+	KitchenDTO add(@ApiParam(name = "body", value = "Representação de uma nova kitchen")
 			KitchenInputDTO kitchenInputDTO);
 
 	
@@ -50,7 +50,7 @@ public interface KitchenControllerOpenApi {
 				content = @Content(mediaType = "application/json",
 				schema = @Schema(implementation = Problem.class)))
 	})
-	public KitchenDTO atualizar(@ApiParam(value = "Atualiza uma kitchen", example = "1") Long kitchenId,
+	KitchenDTO update(@ApiParam(value = "Atualiza uma kitchen", example = "1") Long kitchenId,
                                 @ApiParam(name = "body", value = "Representação de uma kitchen com news dados") KitchenInputDTO kitchenInputDTO);
 	
 	

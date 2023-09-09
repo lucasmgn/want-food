@@ -25,7 +25,7 @@ import static org.hamcrest.CoreMatchers.equalTo;
 class RestaurantITRegistration {
     private static final String VIOLACAO_DE_REGRA_DE_NEGOCIO_PROBLEM_TYPE = "Violação de regra de negócio";
 
-    private static final String DADOS_INVALIDOS_PROBLEM_TITLE = "Dados inválidos";
+    private static final String INVALID_DATA_PROBLEM_TITLE = "Dados inválidos";
 
     private static final int restaurant_ID_INEXISTENTE = 100;
 
@@ -102,7 +102,7 @@ class RestaurantITRegistration {
                 .post()
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+                .body("title", equalTo(INVALID_DATA_PROBLEM_TITLE));
     }
 
     @Test
@@ -115,7 +115,7 @@ class RestaurantITRegistration {
                 .post()
                 .then()
                 .statusCode(HttpStatus.BAD_REQUEST.value())
-                .body("title", equalTo(DADOS_INVALIDOS_PROBLEM_TITLE));
+                .body("title", equalTo(INVALID_DATA_PROBLEM_TITLE));
     }
 
     @Test

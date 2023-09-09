@@ -30,9 +30,8 @@ import javax.validation.Valid;
 import java.util.List;
 
 @Api(tags = "Kitchens")
-//Possui o @ResponsyBody e o @Controller
 @RestController
-@RequestMapping(value = "/kitchens", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/kitchens")
 @RequiredArgsConstructor
 public class KitchenController implements KitchenControllerOpenApi{
 
@@ -72,22 +71,18 @@ public class KitchenController implements KitchenControllerOpenApi{
 	@GetMapping
 	public Page<KitchenDTO> list(@PageableDefault(size = 10) Pageable pageable) {
 		
-		Page<Kitchen> kitchensPages = kitchenRepository.findAll(pageable);
-		
-		List<KitchenDTO> kitchenDTO = kitchenDTOAssembler.toCollectionModel
-				(kitchensPages.getContent());
+		var kitchensPages = kitchenRepository.findAll(pageable);
+		var kitchenDTO = kitchenDTOAssembler.toCollectionModel(kitchensPages.getContent());
 		
 		//Instanciando um new PageImpl, passando a lista kitchenDTO,
 		//pegeable e o total de elementos da page
-		Page<KitchenDTO> kitchenDTOPage = new PageImpl<>(kitchenDTO, pageable,
+		return new PageImpl<>(kitchenDTO, pageable,
 				kitchensPages.getTotalElements());
-		
-		return kitchenDTOPage;
 	}
 
 	@GetMapping(value = "/{kitchenId}")
 	public KitchenDTO find(@PathVariable Long kitchenId) {
-		Kitchen kitchen = registerKitchen.fetchOrFail(kitchenId);
+		var kitchen = registerKitchen.fetchOrFail(kitchenId);
 		
 		return kitchenDTOAssembler.toModel(kitchen);
 	}
@@ -97,18 +92,17 @@ public class KitchenController implements KitchenControllerOpenApi{
 	@ResponseStatus(HttpStatus.CREATED)
 	public KitchenDTO add(@RequestBody @Valid KitchenInputDTO kitchenInputDTO) {
 		
-		Kitchen kitchen = kitchenInputDisassembler.toDomainObject(kitchenInputDTO);
+		var kitchen = kitchenInputDisassembler.toDomainObject(kitchenInputDTO);
 		kitchen = registerKitchen.add(kitchen);
 		
 		return kitchenDTOAssembler.toModel(kitchen);
 	}
 
 	@PutMapping("/{kitchenId}")
-//	@ResponseStatus(HttpStatus.Up)
-	public KitchenDTO atualizar(@PathVariable Long kitchenId,
+	public KitchenDTO update(@PathVariable Long kitchenId,
 								@RequestBody @Valid KitchenInputDTO kitchenInputDTO) {
 		
-		Kitchen kitchenAtual = registerKitchen.fetchOrFail(kitchenId);
+		var kitchenAtual = registerKitchen.fetchOrFail(kitchenId);
 		kitchenInputDisassembler.copyToDomainObject(kitchenInputDTO, kitchenAtual);
 		kitchenAtual = registerKitchen.add(kitchenAtual);
 		

@@ -11,15 +11,15 @@ public enum OrderStatus {
 	 * Do status criado pode ir para o confirmado, do criado pode ir para o cancelado também
 	 * do confirmado pode ir para o delivered
 	 * */
-	CREATED("Criado"),
-	CONFIRMED("Confirmado", CREATED),
-	DELIVERED("Entregue", CONFIRMED),
-	CANCELED("Cancelado", CREATED);
+	CREATED("Created"),
+	CONFIRMED("Confirmed", CREATED),
+	DELIVERED("Delivered", CONFIRMED),
+	CANCELED("Canceled", CREATED);
 	
 	//Denominando os enuns
-	private String description;
+	private final String description;
 	
-	private List<OrderStatus> statusAnteriores;
+	private final List<OrderStatus> statusAnteriores;
 	
 	//Passando varags
 	OrderStatus(String description, OrderStatus... statusAnteriores){
