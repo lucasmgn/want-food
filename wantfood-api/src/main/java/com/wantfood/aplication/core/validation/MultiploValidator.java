@@ -5,15 +5,15 @@ import java.math.BigDecimal;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
-// implementando interface de validação, recebe o nome da anotação criada mais o tipo dela
+// implementando interface de validação, recebe o name da anotação criada mais o tipo dela
 public class MultiploValidator implements ConstraintValidator <Multiplo, Number>{
 
-	private int numeroMultiplo;
+	private int numberMultiplo;
 	
 	//inicializa o validador para preparar chamadas futuras do metodo isValid
 	@Override
 	public void initialize(Multiplo constraintAnnotation) {
-		this.numeroMultiplo = constraintAnnotation.numero();
+		this.numberMultiplo = constraintAnnotation.number();
 	}
 	
 	//Metodo que possui a lógica
@@ -23,7 +23,7 @@ public class MultiploValidator implements ConstraintValidator <Multiplo, Number>
 		
 		if(value != null) {
 			var valorDecimal = BigDecimal.valueOf(value.doubleValue());
-			var multiploDecimal = BigDecimal.valueOf(this.numeroMultiplo);
+			var multiploDecimal = BigDecimal.valueOf(this.numberMultiplo);
 			//dividindo o valorDcimal com o multiplo decimal
 			var resto = valorDecimal.remainder(multiploDecimal);
 			

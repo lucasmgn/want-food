@@ -7,13 +7,13 @@ public enum ProblemType {
 	/*
 	 * Criando constantes para serem utilizadas na classe ApiException
 	 * */
-	RECURSO_NAO_ENCONTRADO("/recurso-nao-encontrado", "Recurso não encontrado"),
-	ENTIDADE_EM_USO("/entidade-em-uso", "Entidade em uso"),
-	ERRO_NEGOCIO("/erro-negocio", "Violação de regra de negócio"),
-	ERRO_NA_MENSAGEM("/erro-na-mensagem","Erro na mensagem"),
-	PARAMETRO_INVALIDO("/parametro-invalido", "Parâmetro Inválido"),
-	ERRO_DE_SISTEMA("/erro-de-sistema", "Erro de sistema"),
-	DADOS_INVALIDOS("/dados-invalidos", "Dados inválidos");
+	RESOURCE_NOT_FOUND("/recurso-nao-encontrado", "Recurso não encontrado"),
+	ENTITY_IN_USE("/entidade-em-uso", "Entidade em uso"),
+	BUSINESS_ERROR("/erro-negocio", "Violação de regra de negócio"),
+	ERRO_MESSAGE("/erro-na-Message","Erro na Message"),
+	INVALID_PARAMETER("/parametro-invalido", "Parâmetro Inválido"),
+	SYSTEM_ERROR("/erro-de-sistema", "Erro de sistema"),
+	INVALID_DATA("/dados-invalidos", "Dados inválidos");
 	
 	private String title;
 	private String uri;

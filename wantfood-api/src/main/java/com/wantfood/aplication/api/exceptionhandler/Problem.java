@@ -13,9 +13,9 @@ import lombok.Getter;
 
 /*
  * Padronizando o formato de problemas
- * no corpo de respostas com a RFC 7807
+ * no body de respostas com a RFC 7807
  * 
- * @ApiModel("Problema"), para nomear na documentação como Problema
+ * @ApiModel("Problema"), para namear na documentação como Problema
  * @ApiModelProperty para documentação, adicioando uma exeplo
  * */
 @ApiModel("Problema")
@@ -27,7 +27,7 @@ public class Problem {
 	@ApiModelProperty(example = "400")
 	private Integer status;
 	
-	@ApiModelProperty(example = "https//wantfood.com.br/erro-na-mensagem")
+	@ApiModelProperty(example = "https//wantfood.com.br/erro-na-Message")
 	private String type;
 	
 	@ApiModelProperty(example = "Dados inválidos")
@@ -46,7 +46,7 @@ public class Problem {
 	private List<Object> objects;
 	
 	/*
-	 *Sendo criado uma classe para listar as causa dos problemas inicialmente
+	 *Sendo criado uma classe para list as causa dos problemas inicialmente
 	 * causados por MethodArgumentNotValidException
 	 * */
 	@ApiModel("ObjetoProblema")

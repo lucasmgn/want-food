@@ -1,24 +1,22 @@
 package com.wantfood.aplication.infrastructure.service.report;
 
-import java.util.HashMap;
-import java.util.Locale;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import com.wantfood.aplication.domain.filter.VendaDiariaFilter;
-import com.wantfood.aplication.domain.service.VendaQueryService;
-import com.wantfood.aplication.domain.service.VendaReportService;
-
+import com.wantfood.aplication.domain.filter.SaleDailyFilter;
+import com.wantfood.aplication.domain.service.SaleQueryService;
+import com.wantfood.aplication.domain.service.SellReportService;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.HashMap;
+import java.util.Locale;
 
 @Service
-public class JasperVendaReportPdfService implements VendaReportService{
+public class JasperVendaReportPdfService implements SellReportService{
 
 	@Autowired
-	private VendaQueryService service;
+	private SaleQueryService service;
 	
 	/*
 	 * Tive problema de Error evaluating expression for source text: DATEFORMAT($F{data},"dd/MM/yyyy" )
@@ -28,16 +26,16 @@ public class JasperVendaReportPdfService implements VendaReportService{
 	 * 
 	 * */
 	@Override
-	public byte[] emitirVendasDiarias(VendaDiariaFilter filter, String timeOffset) {	
+	public byte[] issueDailySales(SaleDailyFilter filter, String timeOffset) {	
 		try {	
-			//Buscando um arquivo
+			//Buscando um file
 			var inputStream = this.getClass().getResourceAsStream("/relatorios/vendas-diarias.jasper");
 
 			var parametros = new HashMap<String, Object>();
 			parametros.put("REPORT_LOCALE", new Locale("pt","BR"));
 		
 			//Fonte de dados
-			var vendasDiarias = service.consultarVendasDiarias(filter, timeOffset);
+			var vendasDiarias = service.consultDailySales(filter, timeOffset);
 			var dataSource = new JRBeanCollectionDataSource(vendasDiarias);
 
 			//Relatório preenchido

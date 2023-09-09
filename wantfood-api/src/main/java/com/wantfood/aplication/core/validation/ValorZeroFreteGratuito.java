@@ -21,6 +21,6 @@ public @interface ValorZeroFreteGratuito {
 	Class<? extends Payload>[] payload() default { };
 	
 	String valorField();
-	String descricaoField();
-	String descricaoObrigatoria();
+	String descriptionField();
+	String descriptionObrigatoria();
 }

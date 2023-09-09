@@ -7,7 +7,7 @@ import java.nio.charset.Charset;
 import org.springframework.util.StreamUtils;
 
 public class ResourceUtils {
-	//Lendo o arquivo json
+	//Lendo o file json
 	public static String getContentFromResource(String resourceName) {
 		
 	    try {

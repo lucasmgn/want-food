@@ -1,0 +1,4 @@
+flyway:
+  url: "jdbc:mysql://localhost/wantfood?createDatabaseIfNotExist=true&severTimezone=UTC"
+  user: "root"
+  password: "root"

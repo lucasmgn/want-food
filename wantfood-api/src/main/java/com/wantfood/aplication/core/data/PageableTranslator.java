@@ -12,14 +12,14 @@ public class PageableTranslator {
 	
 	public static Pageable translate(Pageable pageable,Map<String, String> fieldsMapping) {
 		
-		//Instanciando um novo order 
+		//Instanciando um new order 
 		var orders = pageable.getSort().stream()
 				.filter(order -> fieldsMapping.containsKey(order.getProperty()))
 				.map(order -> new Sort.Order(order.getDirection(),
 						fieldsMapping.get(order.getProperty())))
 				.collect(Collectors.toList());
 
-		//Instanciando uma novo Pageable e passand uma lista de orders
+		//Instanciando uma new Pageable e passand uma lista de orders
 		return PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), Sort.by(orders));
 	}
 }

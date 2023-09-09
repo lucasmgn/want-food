@@ -22,7 +22,7 @@ CustomJpaRepository<T, ID>{
 	}
 
 	@Override
-	public Optional<T> buscarPrimeiro() {
+	public Optional<T> findPrimeiro() {
 		var jpql = "from " + getDomainClass().getName();
 		
 		T entity = manager.createQuery(jpql, getDomainClass()).setMaxResults(1).getSingleResult(); 

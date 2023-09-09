@@ -21,10 +21,10 @@ public class PageJsonSerializer extends JsonSerializer<Page<?>>{
 		
 		gen.writeStartObject();
 		
-		//escrevendo uma propriedade de objeto, o nome é content e o conteudo dela é o page.getContent
+		//escrevendo uma propriedade de objeto, o name é content e o conteudo dela é o page.getContent
 		gen.writeObjectField("content", page.getContent());
 		
-		//adicionando propriedades de paginação, podendo mudar os nomes das propriedades.
+		//adicionando propriedades de paginação, podendo mudar os names das propriedades.
 		gen.writeNumberField("size", page.getSize());
 		gen.writeNumberField("totalElements", page.getTotalElements());
 		gen.writeNumberField("totalPages", page.getTotalPages());

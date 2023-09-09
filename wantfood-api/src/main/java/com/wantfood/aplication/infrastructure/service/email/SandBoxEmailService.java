@@ -8,18 +8,18 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 
 import com.wantfood.aplication.core.email.EmailProperties;
 
-public class SandBoxEmailService extends SmtpEnvioEmailService {
+public class SandBoxEmailService extends SmtpShippingEmailService {
 
 	  @Autowired
 	  private EmailProperties emailProperties;
 	  
-		// Separei a criação de MimeMessage em um método na classe pai (criarMimeMessage),
+		// Separei a criação de MimeMessage em um método na classe pai (createMimeMessage),
 		// para possibilitar a sobrescrita desse método aqui
 	  @Override
-	  protected MimeMessage criarMimeMessage(Mensagem mensagem) throws MessagingException {
-			MimeMessage mimeMessage = super.criarMimeMessage(mensagem);
+	  protected MimeMessage createMimeMessage(Message message) throws MessagingException {
+			var mimeMessage = super.createMimeMessage(message);
 		
-			MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, "UTF-8");
+			var helper = new MimeMessageHelper(mimeMessage, "UTF-8");
 			helper.setTo(emailProperties.getSandbox().getDestinatario());
 			
 			return mimeMessage;

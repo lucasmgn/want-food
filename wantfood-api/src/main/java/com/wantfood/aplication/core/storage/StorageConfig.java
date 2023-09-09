@@ -10,9 +10,9 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.wantfood.aplication.core.storage.StorageProperties.TipoStorage;
-import com.wantfood.aplication.domain.service.FotoStorageService;
-import com.wantfood.aplication.infrastructure.service.storage.LocalFotoStorageService;
-import com.wantfood.aplication.infrastructure.service.storage.S3FotoStorageService;
+import com.wantfood.aplication.domain.service.PhotoStorageService;
+import com.wantfood.aplication.infrastructure.service.storage.LocalPhotoStorageService;
+import com.wantfood.aplication.infrastructure.service.storage.S3PhotoStorageService;
 
 @Configuration
 public class StorageConfig {
@@ -36,11 +36,11 @@ public class StorageConfig {
 	}
 	
 	@Bean
-	FotoStorageService fotoStorageService() {	
+    PhotoStorageService photoStorageService() {
 		if(TipoStorage.S3.equals(storageProperties.getTipo())) {
-			return new S3FotoStorageService();
+			return new S3PhotoStorageService();
 		}else {
-			return new LocalFotoStorageService();
+			return new LocalPhotoStorageService();
 		}
 		
 	}

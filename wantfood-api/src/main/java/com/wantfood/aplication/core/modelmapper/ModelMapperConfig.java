@@ -1,13 +1,12 @@
 package com.wantfood.aplication.core.modelmapper;
 
+import com.wantfood.aplication.api.model.AddressDTO;
+import com.wantfood.aplication.api.model.input.ItemOrderInputDTO;
+import com.wantfood.aplication.domain.model.Address;
+import com.wantfood.aplication.domain.model.ItemOrder;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
-
-import com.wantfood.aplication.api.model.EnderecoDTO;
-import com.wantfood.aplication.api.model.input.ItemPedidoInputDTO;
-import com.wantfood.aplication.domain.model.Endereco;
-import com.wantfood.aplication.domain.model.ItemPedido;
 
 @Component
 public class ModelMapperConfig {
@@ -16,19 +15,19 @@ public class ModelMapperConfig {
 	ModelMapper modelMapper() {
 		var modelMapper = new ModelMapper();
 		
-//		modelMapper.createTypeMap(Restaurante.class, RestauranteModel.class)
-//			.addMapping(Restaurante::getTaxaFrete, RestauranteModel::setPrecoFrete);
+//		modelMapper.createTypeMap(restaurant.class, restaurantModel.class)
+//			.addMapping(restaurant::getrateShipping, restaurantModel::setPrecoFrete);
 		
-		var enderecoToEnderecoDTOTypeMap = modelMapper.createTypeMap(Endereco.class, EnderecoDTO.class);
+		var addressToAddressDTOTypeMap = modelMapper.createTypeMap(Address.class, AddressDTO.class);
 		
-		//src é o endereco, src é a origem e o destino é feito com 2 argumentos destino e valor 
+		//src é o address, src é a origem e o destino é feito com 2 argumentos destino e valor 
 		//onde será aplicado o valor no destino
-		enderecoToEnderecoDTOTypeMap.addMapping(
-				enderecoSrc -> enderecoSrc.getCidade().getEstado().getNome(),
-					(enderecoDTODest, value) -> enderecoDTODest.getCidade().setEstado((String) value));
+		addressToAddressDTOTypeMap.addMapping(
+				addressSrc -> addressSrc.getCity().getState().getName(),
+					(addressDTODest, value) -> addressDTODest.getCity().setState((String) value));
 		
-		modelMapper.createTypeMap(ItemPedidoInputDTO.class, ItemPedido.class)
-	    .addMappings(mapper -> mapper.skip(ItemPedido::setId)); 
+		modelMapper.createTypeMap(ItemOrderInputDTO.class, ItemOrder.class)
+	    .addMappings(mapper -> mapper.skip(ItemOrder::setId)); 
 		
 		return modelMapper; 
 	}
